@@ -36,6 +36,7 @@ export function updateBotSettings(
   maintenance,
   enabled,
   guildId,
+  expRewardChannelId,
 ) {
   return function (dispatch) {
     axios.post(`${window.myConfig.apiUrl}/management/bot/settings/update`, {
@@ -43,6 +44,7 @@ export function updateBotSettings(
       maintenance,
       enabled,
       guildId,
+      expRewardChannelId,
     }).then((response) => {
       dispatch({
         type: UPDATE_BOTSETTINGS,
