@@ -31,7 +31,6 @@ import Servers from './views/management/Servers';
 import UserView from './views/management/User';
 
 import Channels from './views/management/Channels';
-import TriviaManagement from './views/management/TriviaManagement';
 import Users from './views/management/Users';
 import BotSettings from './views/management/BotSettings';
 import Features from './views/management/Features';
@@ -39,6 +38,7 @@ import DashboardUsers from './views/management/DashboardUsers';
 import PriceCurrenciesManagement from './views/management/PriceCurrencies';
 import WithdrawalAddressesView from './views/management/WithdrawalAddresses';
 import WithdrawalAddressView from './views/management/WithdrawalAddress';
+import RanksManagementView from './views/management/Ranks';
 
 import FunctionsView from './views/functions/Functions';
 import FunctionView from './views/functions/Function';
@@ -138,211 +138,6 @@ const RoutesX = function (props) {
           element={<WithdrawalAddressView />}
         />
 
-        <Route
-          path="/functions/rains"
-          element={(
-            <FunctionsView
-              functionName="rain"
-            />
-          )}
-        />
-        <Route
-          path="/functions/rain/:functionId"
-          element={(
-            <FunctionView
-              functionName="rain"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/floods"
-          element={(
-            <FunctionsView
-              functionName="flood"
-            />
-          )}
-        />
-        <Route
-          path="/functions/flood/:functionId"
-          element={(
-            <FunctionView
-              functionName="flood"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/sleets"
-          element={(
-            <FunctionsView
-              functionName="sleet"
-            />
-          )}
-        />
-        <Route
-          path="/functions/sleet/:sleetId"
-          element={(
-            <FunctionView
-              functionName="sleet"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/soaks"
-          element={(
-            <FunctionsView
-              functionName="soak"
-            />
-          )}
-        />
-        <Route
-          path="/functions/soak/:functionId"
-          element={(
-            <FunctionView
-              functionName="soak"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/tips"
-          element={(
-            <FunctionsView
-              functionName="tip"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/tip/:functionId"
-          element={(
-            <FunctionView
-              functionName="tip"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/voicerains"
-          element={(
-            <FunctionsView
-              functionName="voicerain"
-            />
-          )}
-        />
-        <Route
-          path="/functions/voicerain/:functionId"
-          element={(
-            <FunctionView
-              functionName="voicerain"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/thunders"
-          element={(
-            <FunctionsView
-              functionName="thunder"
-            />
-          )}
-        />
-        <Route
-          path="/functions/thunder/:functionId"
-          element={(
-            <FunctionView
-              functionName="thunder"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/hurricanes"
-          element={(
-            <FunctionsView
-              functionName="hurricane"
-            />
-          )}
-        />
-        <Route
-          path="/functions/hurricane/:functionId"
-          element={(
-            <FunctionView
-              functionName="hurricane"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/thunderstorms"
-          element={(
-            <FunctionsView
-              functionName="thunderstorm"
-            />
-          )}
-        />
-        <Route
-          path="/functions/thunderstorm/:functionId"
-          element={(
-            <FunctionView
-              functionName="thunderstorm"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/trivias"
-          element={(
-            <FunctionsView
-              functionName="trivia"
-            />
-          )}
-        />
-        <Route
-          path="/functions/trivia/:functionId"
-          element={(
-            <FunctionView
-              functionName="trivia"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/reactdrops"
-          element={(
-            <FunctionsView
-              functionName="reactdrop"
-            />
-          )}
-        />
-        <Route
-          path="/functions/reactdrop/:functionId"
-          element={(
-            <FunctionView
-              functionName="reactdrop"
-            />
-          )}
-        />
-
-        <Route
-          path="/functions/trivias"
-          element={(
-            <FunctionsView
-              functionName="trivia"
-            />
-          )}
-        />
-        <Route
-          path="/functions/trivia/:functionId"
-          element={(
-            <FunctionView
-              functionName="trivia"
-            />
-          )}
-        />
-
         {/* <Route
           path="/activity"
           element={<Activity />}
@@ -364,13 +159,14 @@ const RoutesX = function (props) {
           element={<DashboardUsers />}
         />
         <Route
-          path="/management/trivia"
-          element={<TriviaManagement />}
-        />
-        <Route
           path="/management/pricecurrencies"
           element={<PriceCurrenciesManagement />}
         />
+        <Route
+          path="/management/ranks"
+          element={<RanksManagementView />}
+        />
+
         <Route
           path="/settings"
           element={<Settings />}

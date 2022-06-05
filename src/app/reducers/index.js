@@ -24,10 +24,6 @@ import patchDeposits from './patchDeposits';
 import faucetBalance from './faucetBalance';
 import blockNumber from './blockNumber';
 import startSync from './startSync';
-import triviaQuestions from './triviaQuestions';
-import insertTrivia from './insertTrivia';
-import removeTrivia from './removeTrivia';
-import switchTrivia from './switchTrivia';
 import errors from './errors';
 import user from './user';
 import priceCurrencies from './priceCurrencies';
@@ -37,6 +33,8 @@ import withdrawalAddress from './withdrawalAddress';
 
 import botFunctions from './botFunctions';
 import botFunction from './botFunction';
+
+import ranks from './ranks';
 
 const store = configureStore({
   reducer: {
@@ -66,10 +64,6 @@ const store = configureStore({
     faucetBalance,
     blockNumber,
     startSync,
-    triviaQuestions,
-    insertTrivia,
-    removeTrivia,
-    switchTrivia,
     priceCurrencies,
     errors,
     userInfo,
@@ -79,6 +73,8 @@ const store = configureStore({
 
     botFunctions,
     botFunction,
+
+    ranks,
   },
 })
 

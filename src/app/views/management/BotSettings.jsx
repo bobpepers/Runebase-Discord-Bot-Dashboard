@@ -16,6 +16,7 @@ import {
   TableRow,
   Select,
   MenuItem,
+  TextField,
 } from '@mui/material';
 
 import {
@@ -35,11 +36,13 @@ const BotSettingsView = function (props) {
   });
   const [unitMaintenance, setUnitMaintenance] = useState(null);
   const [unitEnabled, setUnitEnabled] = useState(null);
+  const [unitGuildId, setUnitGuildId] = useState(null);
 
   const onEdit = ({
     id,
     currentUnitMaintenance,
     currentUnitEnabled,
+    currentUnitGuildId,
   }) => {
     setInEditMode({
       status: true,
@@ -47,16 +50,23 @@ const BotSettingsView = function (props) {
     })
     setUnitMaintenance(currentUnitMaintenance);
     setUnitEnabled(currentUnitEnabled);
+    setUnitGuildId(currentUnitGuildId);
   }
 
   const onSave = async ({ id }) => {
-    await dispatch(updateBotSettings(id, unitMaintenance, unitEnabled));
+    await dispatch(updateBotSettings(
+      id,
+      unitMaintenance,
+      unitEnabled,
+      unitGuildId,
+    ));
     setInEditMode({
       status: false,
       rowKey: null,
     });
     setUnitMaintenance(null);
     setUnitEnabled(null);
+    setUnitGuildId(null);
   }
 
   const onCancel = () => {
@@ -66,6 +76,7 @@ const BotSettingsView = function (props) {
     });
     setUnitMaintenance(null);
     setUnitEnabled(null);
+    setUnitGuildId(null);
   }
 
   useEffect(() => {
@@ -93,6 +104,7 @@ const BotSettingsView = function (props) {
               <TableCell align="right">name</TableCell>
               <TableCell align="right">maintenance</TableCell>
               <TableCell align="right">enabed</TableCell>
+              <TableCell align="right">discord guild id</TableCell>
               <TableCell align="right">modify</TableCell>
             </TableRow>
           </TableHead>
@@ -155,6 +167,20 @@ const BotSettingsView = function (props) {
                   <TableCell align="right">
                     {
                       inEditMode.status && inEditMode.rowKey === setting.id ? (
+                        <TextField
+                          value={unitGuildId}
+                          onChange={(event) => setUnitGuildId(event.target.value)}
+                        />
+
+                      ) : (
+                        setting.discordHomeServerGuildId
+                      )
+                    }
+                  </TableCell>
+
+                  <TableCell align="right">
+                    {
+                      inEditMode.status && inEditMode.rowKey === setting.id ? (
                         <>
                           <Button
                             variant="contained"
@@ -164,6 +190,7 @@ const BotSettingsView = function (props) {
                               id: setting.id,
                               maintenance: unitMaintenance,
                               enabled: unitEnabled,
+                              guildId: unitGuildId,
                             })}
                           >
                             Save
@@ -188,6 +215,7 @@ const BotSettingsView = function (props) {
                             id: setting.id,
                             currentUnitMaintenance: setting.maintenance,
                             currentUnitEnabled: setting.enabled,
+                            currentUnitGuildId: setting.discordHomeServerGuildId,
                           })}
                         >
                           Edit

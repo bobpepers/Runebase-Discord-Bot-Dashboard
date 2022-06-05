@@ -31,12 +31,18 @@ export function fetchBotSettings() {
   }
 }
 
-export function updateBotSettings(id, maintenance, enabled) {
+export function updateBotSettings(
+  id,
+  maintenance,
+  enabled,
+  guildId,
+) {
   return function (dispatch) {
     axios.post(`${window.myConfig.apiUrl}/management/bot/settings/update`, {
       id,
       maintenance,
       enabled,
+      guildId,
     }).then((response) => {
       dispatch({
         type: UPDATE_BOTSETTINGS,
