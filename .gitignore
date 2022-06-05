@@ -1,0 +1,10 @@
+/node_modules
+/.idea
+.DS_Store
+bundle.js
+npm-debug.log
+.env
+.env.development
+.env.production
+static/config.js
+
