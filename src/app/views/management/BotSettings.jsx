@@ -38,6 +38,7 @@ const BotSettingsView = function (props) {
   const [unitEnabled, setUnitEnabled] = useState(null);
   const [unitGuildId, setUnitGuildId] = useState(null);
   const [unitExpRewardChannelId, setUnitExpRewardChannelId] = useState(null);
+  const [unitJoinedRoleId, setUnitJoinedRoleId] = useState(null);
 
   const onEdit = ({
     id,
@@ -45,6 +46,7 @@ const BotSettingsView = function (props) {
     currentUnitEnabled,
     currentUnitGuildId,
     currentUnitExpRewardChannelId,
+    currentUnitJoinedRoleId,
   }) => {
     setInEditMode({
       status: true,
@@ -54,6 +56,7 @@ const BotSettingsView = function (props) {
     setUnitEnabled(currentUnitEnabled);
     setUnitGuildId(currentUnitGuildId);
     setUnitExpRewardChannelId(currentUnitExpRewardChannelId);
+    setUnitJoinedRoleId(currentUnitJoinedRoleId);
   }
 
   const onSave = async ({ id }) => {
@@ -63,6 +66,7 @@ const BotSettingsView = function (props) {
       unitEnabled,
       unitGuildId,
       unitExpRewardChannelId,
+      unitJoinedRoleId,
     ));
     setInEditMode({
       status: false,
@@ -72,6 +76,7 @@ const BotSettingsView = function (props) {
     setUnitEnabled(null);
     setUnitGuildId(null);
     setUnitExpRewardChannelId(null);
+    setUnitJoinedRoleId(null);
   }
 
   const onCancel = () => {
@@ -83,6 +88,7 @@ const BotSettingsView = function (props) {
     setUnitEnabled(null);
     setUnitGuildId(null);
     setUnitExpRewardChannelId(null);
+    setUnitJoinedRoleId(null);
   }
 
   useEffect(() => {
@@ -112,6 +118,7 @@ const BotSettingsView = function (props) {
               <TableCell align="right">enabed</TableCell>
               <TableCell align="right">discord guild id</TableCell>
               <TableCell align="right">exp Reward channel id</TableCell>
+              <TableCell align="right">joined Role id</TableCell>
               <TableCell align="right">modify</TableCell>
             </TableRow>
           </TableHead>
@@ -197,6 +204,19 @@ const BotSettingsView = function (props) {
                       )
                     }
                   </TableCell>
+                  <TableCell align="right">
+                    {
+                      inEditMode.status && inEditMode.rowKey === setting.id ? (
+                        <TextField
+                          value={unitJoinedRoleId}
+                          onChange={(event) => setUnitJoinedRoleId(event.target.value)}
+                        />
+
+                      ) : (
+                        setting.joinedRoleId
+                      )
+                    }
+                  </TableCell>
 
                   <TableCell align="right">
                     {
@@ -212,6 +232,7 @@ const BotSettingsView = function (props) {
                               enabled: unitEnabled,
                               guildId: unitGuildId,
                               expRewardChannelId: unitExpRewardChannelId,
+                              joinedRoleId: unitJoinedRoleId,
                             })}
                           >
                             Save
@@ -238,6 +259,7 @@ const BotSettingsView = function (props) {
                             currentUnitEnabled: setting.enabled,
                             currentUnitGuildId: setting.discordHomeServerGuildId,
                             currentUnitExpRewardChannelId: setting.expRewardChannelId,
+                            currentUnitJoinedRoleId: setting.joinedRoleId,
                           })}
                         >
                           Edit

@@ -37,6 +37,7 @@ export function updateBotSettings(
   enabled,
   guildId,
   expRewardChannelId,
+  joinedRoleId,
 ) {
   return function (dispatch) {
     axios.post(`${window.myConfig.apiUrl}/management/bot/settings/update`, {
@@ -45,6 +46,7 @@ export function updateBotSettings(
       enabled,
       guildId,
       expRewardChannelId,
+      joinedRoleId,
     }).then((response) => {
       dispatch({
         type: UPDATE_BOTSETTINGS,
