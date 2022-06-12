@@ -74,15 +74,15 @@ export function addClassDescriptionAction(obj) {
 export function updateClassDescriptionAction(
   id,
   name,
-  expNeeded,
-  roleId,
+  description,
+  image,
 ) {
   return function (dispatch) {
     axios.post(`${window.myConfig.apiUrl}/management/class/description/update`, {
       id,
       name,
-      expNeeded,
-      roleId,
+      description,
+      image,
     })
       .then((response) => {
         dispatch({
