@@ -200,6 +200,22 @@ const Header = function (props) {
               </Link>
               <Link
                 className="nav-link"
+                to="/management/class/descriptions"
+              >
+                <MenuItem onClick={handleCloseManagement}>
+                  ClassDescriptions
+                </MenuItem>
+              </Link>
+              <Link
+                className="nav-link"
+                to="/management/classes"
+              >
+                <MenuItem onClick={handleCloseManagement}>
+                  Classes
+                </MenuItem>
+              </Link>
+              <Link
+                className="nav-link"
                 to="/management/pricecurrencies"
               >
                 <MenuItem onClick={handleCloseManagement}>

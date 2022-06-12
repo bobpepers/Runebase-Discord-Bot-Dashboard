@@ -35,6 +35,8 @@ import botFunctions from './botFunctions';
 import botFunction from './botFunction';
 
 import ranks from './ranks';
+import classDescriptions from './classDescriptions';
+import classes from './class';
 
 const store = configureStore({
   reducer: {
@@ -75,6 +77,8 @@ const store = configureStore({
     botFunction,
 
     ranks,
+    classDescriptions,
+    classes,
   },
 })
 

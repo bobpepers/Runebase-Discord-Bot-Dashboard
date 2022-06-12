@@ -39,6 +39,8 @@ import PriceCurrenciesManagement from './views/management/PriceCurrencies';
 import WithdrawalAddressesView from './views/management/WithdrawalAddresses';
 import WithdrawalAddressView from './views/management/WithdrawalAddress';
 import RanksManagementView from './views/management/Ranks';
+import ClassDescriptionsView from './views/management/ClassDescription';
+import ClassesView from './views/management/Classes';
 
 import FunctionsView from './views/functions/Functions';
 import FunctionView from './views/functions/Function';
@@ -165,6 +167,14 @@ const RoutesX = function (props) {
         <Route
           path="/management/ranks"
           element={<RanksManagementView />}
+        />
+        <Route
+          path="/management/classes"
+          element={<ClassesView />}
+        />
+        <Route
+          path="/management/class/descriptions"
+          element={<ClassDescriptionsView />}
         />
 
         <Route
