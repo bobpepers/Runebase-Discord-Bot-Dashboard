@@ -100,6 +100,8 @@ const ClassesView = function (props) {
   const [unitLife, setUnitLife] = useState(null);
   const [unitMana, setUnitMana] = useState(null);
   const [unitStamina, setUnitStamina] = useState(null);
+  const [unitAttackRating, setUnitAttackRating] = useState(null);
+  const [unitDefense, setUnitDefense] = useState(null);
   const [unitDescription, setUnitDescription] = useState(null);
   const [descriptionId, setDescriptionId] = useState('All');
 
@@ -117,6 +119,8 @@ const ClassesView = function (props) {
     currentUnitLife,
     currentUnitMana,
     currentUnitStamina,
+    currentUnitAttackRating,
+    currentUnitDefense,
     currentUnitDescription,
   }) => {
     setInEditMode({
@@ -131,6 +135,8 @@ const ClassesView = function (props) {
     setUnitLife(currentUnitLife);
     setUnitMana(currentUnitMana);
     setUnitStamina(currentUnitStamina);
+    setUnitAttackRating(currentUnitAttackRating);
+    setUnitDefense(currentUnitDefense);
     setUnitDescription(currentUnitDescription);
   }
 
@@ -139,8 +145,6 @@ const ClassesView = function (props) {
   }
 
   const onSave = async ({ id }) => {
-    console.log(unitDescription);
-    console.log('unitDescription');
     await dispatch(
       updateClassAction(
         id,
@@ -152,6 +156,8 @@ const ClassesView = function (props) {
         unitLife,
         unitMana,
         unitStamina,
+        unitAttackRating,
+        unitDefense,
         unitDescription.id,
       ),
     );
@@ -167,6 +173,8 @@ const ClassesView = function (props) {
     setUnitLife(null);
     setUnitMana(null);
     setUnitStamina(null);
+    setUnitAttackRating(null);
+    setUnitDefense(null);
     setUnitDescription(null);
   }
 
@@ -183,6 +191,8 @@ const ClassesView = function (props) {
     setUnitLife(null);
     setUnitMana(null);
     setUnitStamina(null);
+    setUnitAttackRating(null);
+    setUnitDefense(null);
     setUnitDescription(null);
   }
 
@@ -272,6 +282,22 @@ const ClassesView = function (props) {
           </Grid>
           <Grid item xs={4}>
             <Field
+              name="attackRating"
+              component={renderField}
+              type="text"
+              placeholder="attackRating"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="defense"
+              component={renderField}
+              type="text"
+              placeholder="defense"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
               name="description"
               component={renderSelectField}
               onChange={(val, prevVal) => changeDescription(val, prevVal)}
@@ -316,6 +342,8 @@ const ClassesView = function (props) {
               <TableCell align="right">life</TableCell>
               <TableCell align="right">mana</TableCell>
               <TableCell align="right">stamina</TableCell>
+              <TableCell align="right">attackRating</TableCell>
+              <TableCell align="right">defense</TableCell>
               <TableCell align="right">description</TableCell>
               <TableCell align="right">last updated</TableCell>
               <TableCell align="right">edit/remove</TableCell>
@@ -435,6 +463,32 @@ const ClassesView = function (props) {
                         )
                       }
                     </TableCell>
+                    <TableCell component="th" scope="row" align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitAttackRating}
+                            onChange={(event) => setUnitAttackRating(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.attackRating
+                        )
+                      }
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitDefense}
+                            onChange={(event) => setUnitDefense(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.defense
+                        )
+                      }
+                    </TableCell>
                     <TableCell align="right">
                       {
                         inEditMode.status && inEditMode.rowKey === rank.id ? (
@@ -481,6 +535,8 @@ const ClassesView = function (props) {
                                 life: unitLife,
                                 mana: unitMana,
                                 stamina: unitStamina,
+                                attackRating: unitAttackRating,
+                                defense: unitDefense,
                                 description: unitDescription.id,
                               })}
                             >
@@ -513,6 +569,8 @@ const ClassesView = function (props) {
                                 currentUnitLife: rank.life,
                                 currentUnitMana: rank.mana,
                                 currentUnitStamina: rank.stamina,
+                                currentUnitAttackRating: rank.attackRating,
+                                currentUnitDefense: rank.defense,
                                 currentUnitDescription: rank.classDescription,
                               })}
                             >
@@ -575,6 +633,12 @@ const validate = (formProps) => {
   }
   if (!formProps.stamina) {
     errors.stamina = 'stamina is required'
+  }
+  if (!formProps.attackRating) {
+    errors.attackRating = 'attackRating is required'
+  }
+  if (!formProps.defense) {
+    errors.defense = 'defense is required'
   }
   if (!formProps.description) {
     errors.description = 'description is required'

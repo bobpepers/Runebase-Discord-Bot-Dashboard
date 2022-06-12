@@ -82,6 +82,8 @@ export function updateClassAction(
   life,
   mana,
   stamina,
+  attackRating,
+  defense,
   description,
 ) {
   return function (dispatch) {
@@ -95,6 +97,8 @@ export function updateClassAction(
       life,
       mana,
       stamina,
+      attackRating,
+      defense,
       description,
     })
       .then((response) => {
