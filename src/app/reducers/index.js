@@ -39,6 +39,8 @@ import classDescriptions from './classDescriptions';
 import classes from './class';
 import itemType from './itemType';
 import itemFamily from './itemFamily';
+import itemQuality from './itemQuality';
+import itemModifier from './itemModifier';
 
 const store = configureStore({
   reducer: {
@@ -83,6 +85,8 @@ const store = configureStore({
     classes,
     itemType,
     itemFamily,
+    itemQuality,
+    itemModifier,
   },
 })
 

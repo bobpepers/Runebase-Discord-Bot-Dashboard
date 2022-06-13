@@ -42,9 +42,7 @@ import RanksManagementView from './views/management/Ranks';
 import ClassDescriptionsView from './views/management/ClassDescription';
 import ClassesView from './views/management/Classes';
 import ItemsFamiliesView from './views/management/ItemFamily';
-
-import FunctionsView from './views/functions/Functions';
-import FunctionView from './views/functions/Function';
+import ItemsModifiersView from './views/management/ItemModifiers';
 
 import Deposits from './views/functions/Deposits';
 import Withdrawals from './views/functions/Withdrawals';
@@ -172,6 +170,10 @@ const RoutesX = function (props) {
         <Route
           path="/management/item/families"
           element={<ItemsFamiliesView />}
+        />
+        <Route
+          path="/management/item/modifiers"
+          element={<ItemsModifiersView />}
         />
         <Route
           path="/management/classes"
