@@ -17,6 +17,10 @@ import {
   TableRow,
   TextField,
   FormControl,
+  FormHelperText,
+  MenuItem,
+  InputLabel,
+  Select,
 } from '@mui/material';
 
 import {
@@ -25,38 +29,49 @@ import {
 } from 'redux-form';
 
 import {
-  fetchClassDescriptionsAction,
-  addClassDescriptionAction,
-  updateClassDescriptionAction,
-  removeClassDescriptionAction,
-} from '../../actions/classDescriptions';
+  fetchItemModifierLinksAction,
+  addItemModifierLinkAction,
+  updateItemModifierLinkAction,
+  removeItemModifierLinkAction,
+} from '../../actions/linkItemModifierToItemType';
 
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
+import {
+  fetchItemTypeAction,
+} from '../../actions/itemType';
+
+import {
+  fetchItemModifiersAction,
+} from '../../actions/itemModifier';
+
+const renderSelectField = ({
+  input,
+  label,
+  meta: { touched, error },
+  children,
+  ...custom
 }) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
+  <FormControl className="admin-form-field" style={{ width: '100%' }}>
+    <InputLabel error={touched && error}>{label}</InputLabel>
+    <Select
+      style={{ width: '100%' }}
+      floatingLabelText={label}
+      error={touched && error}
+      {...input}
+      children={children}
+      {...custom}
+    />
+    <FormHelperText error={touched && error}>{error}</FormHelperText>
+  </FormControl>
+)
 
-const ItemsBaseView = function (props) {
+const LinkItemModifierToItemTypeView = function (props) {
   const {
     auth,
-    classDescriptions,
     handleSubmit,
+    itemType,
+    itemFamily,
+    itemModifier,
+    itemModifierItemType,
   } = props;
   const dispatch = useDispatch();
   const [inEditMode, setInEditMode] = useState({
@@ -64,37 +79,39 @@ const ItemsBaseView = function (props) {
     rowKey: null,
   });
   const [unitName, setUnitName] = useState(null);
-  const [unitDescription, setUnitDescription] = useState(null);
-  const [unitImage, setUnitImage] = useState(null);
+  const [unitItemType, setUnitItemType] = useState(null);
+  const [itemTypeId, setItemTypeId] = useState('All');
+  const [itemModifierId, setItemModifierId] = useState('All');
 
   const onEdit = ({
     id,
     currentUnitName,
-    currentUnitDescription,
-    currentUnitImage,
+    currentUnitItemType,
   }) => {
     setInEditMode({
       status: true,
       rowKey: id,
     })
     setUnitName(currentUnitName);
-    setUnitDescription(currentUnitDescription);
-    setUnitImage(currentUnitImage);
+    setUnitItemType(currentUnitItemType);
   }
 
   const onRemove = async (id) => {
-    await dispatch(removeClassDescriptionAction(id));
+    await dispatch(removeItemModifierLinkAction(id));
   }
 
   const onSave = async ({ id }) => {
-    await dispatch(updateClassDescriptionAction(id, unitName, unitDescription, unitImage));
+    await dispatch(updateItemModifierLinkAction(
+      id,
+      unitName,
+      itemTypeId,
+    ));
     setInEditMode({
       status: false,
       rowKey: null,
     })
     setUnitName(null);
-    setUnitDescription(null);
-    setUnitImage(null);
+    setItemTypeId(null);
   }
 
   const onCancel = () => {
@@ -103,51 +120,66 @@ const ItemsBaseView = function (props) {
       rowKey: null,
     })
     setUnitName(null);
-    setUnitDescription(null);
-    setUnitImage(null);
+    setItemTypeId(null);
   }
 
   useEffect(() => {
-    dispatch(fetchClassDescriptionsAction());
+    dispatch(fetchItemModifiersAction());
+    dispatch(fetchItemTypeAction());
+    dispatch(fetchItemModifierLinksAction());
   }, [
     auth,
   ]);
 
   useEffect(() => { }, [
-    classDescriptions,
+    itemType,
+    itemFamily,
   ]);
 
   const handleFormSubmit = async (obj) => {
-    await dispatch(addClassDescriptionAction(obj));
+    await dispatch(addItemModifierLinkAction(obj));
+  }
+
+  const changeItemType = (val, preVal) => {
+    setItemTypeId(preVal);
+  }
+  const changeItemModifier = (val, preVal) => {
+    setItemModifierId(preVal);
   }
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
       <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
         <Grid container>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Field
-              name="name"
-              component={renderField}
-              type="text"
-              placeholder="name"
-            />
+              name="itemType"
+              component={renderSelectField}
+              onChange={(val, prevVal) => changeItemType(val, prevVal)}
+              label="itemType"
+            >
+              {itemType && itemType.data && itemType.data.map((server) => (
+                <MenuItem key={server.id} value={server.id}>
+                  {server.name}
+                </MenuItem>
+              ))}
+            </Field>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Field
-              name="description"
-              component={renderField}
-              type="text"
-              placeholder="description"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="image"
-              component={renderField}
-              type="text"
-              placeholder="image"
-            />
+              name="itemModifier"
+              component={renderSelectField}
+              onChange={(val, prevVal) => changeItemModifier(val, prevVal)}
+              label="itemModifier"
+            >
+              {itemModifier && itemModifier.data && itemModifier.data.map((server) => (
+                <MenuItem key={server.id} value={server.id}>
+                  {server.prefix && server.prefix}
+                  {' '}
+                  {server.suffix && server.suffix}
+                </MenuItem>
+              ))}
+            </Field>
           </Grid>
           <Grid item xs={6}>
             <Button
@@ -173,17 +205,16 @@ const ItemsBaseView = function (props) {
           <TableHead>
             <TableRow>
               <TableCell>id</TableCell>
-              <TableCell align="right">name</TableCell>
-              <TableCell align="right">description</TableCell>
-              <TableCell align="right">image</TableCell>
+              <TableCell align="right">itemType</TableCell>
+              <TableCell align="right">itemModifier</TableCell>
               <TableCell align="right">last updated</TableCell>
               <TableCell align="right">edit/remove</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {classDescriptions
-              && classDescriptions.data
-              && classDescriptions.data.map((rank, i) => {
+            {itemModifierItemType
+              && itemModifierItemType.data
+              && itemModifierItemType.data.map((rank, i) => {
                 console.log(rank);
                 return (
                   <TableRow key={i}>
@@ -199,36 +230,37 @@ const ItemsBaseView = function (props) {
                           />
 
                         ) : (
-                          rank.name
+                          rank.itemType.name
                         )
                       }
                     </TableCell>
                     <TableCell align="right">
                       {
                         inEditMode.status && inEditMode.rowKey === rank.id ? (
-                          <TextField
-                            value={unitDescription}
-                            onChange={(event) => setUnitDescription(event.target.value)}
-                          />
-
+                          <Field
+                            name="itemType"
+                            component={renderSelectField}
+                            onChange={(val, prevVal) => changeItemType(val, prevVal)}
+                            label="itemType"
+                          >
+                            {itemModifier && itemModifier.data && itemModifier.data.map((server) => (
+                              <MenuItem key={server.id} value={server.id}>
+                                {rank.itemModifier.prefix}
+                                {' '}
+                                {rank.itemModifier.suffix}
+                              </MenuItem>
+                            ))}
+                          </Field>
                         ) : (
-                          rank.description
+                          <span>
+                            {rank.itemModifier.prefix}
+                            {' '}
+                            {rank.itemModifier.suffix}
+                          </span>
                         )
                       }
                     </TableCell>
-                    <TableCell align="right">
-                      {
-                        inEditMode.status && inEditMode.rowKey === rank.id ? (
-                          <TextField
-                            value={unitImage}
-                            onChange={(event) => setUnitImage(event.target.value)}
-                          />
 
-                        ) : (
-                          rank.image
-                        )
-                      }
-                    </TableCell>
                     <TableCell align="right">
                       {
                         rank.updatedAt
@@ -245,8 +277,7 @@ const ItemsBaseView = function (props) {
                               onClick={() => onSave({
                                 id: rank.id,
                                 name: unitName,
-                                description: unitDescription,
-                                image: unitImage,
+                                itemType: unitItemType,
                               })}
                             >
                               Save
@@ -271,8 +302,7 @@ const ItemsBaseView = function (props) {
                               onClick={() => onEdit({
                                 id: rank.id,
                                 currentUnitName: rank.name,
-                                currentUnitDescription: rank.description,
-                                currentUnitImage: rank.image,
+                                currentUnitItemType: rank.itemType,
                               })}
                             >
                               Edit
@@ -304,24 +334,23 @@ const ItemsBaseView = function (props) {
 function mapStateToProps(state) {
   return {
     auth: state.auth,
-    classDescriptions: state.classDescriptions,
+    itemType: state.itemType,
+    itemModifier: state.itemModifier,
+    itemModifierItemType: state.itemModifierItemType,
   };
 }
 
 const validate = (formProps) => {
   const errors = {};
-  if (!formProps.name) {
-    errors.name = 'Name is required'
+  if (!formProps.itemModifier) {
+    errors.itemModifier = 'itemModifier is required'
   }
-  if (!formProps.description) {
-    errors.description = 'description is required'
-  }
-  if (!formProps.image) {
-    errors.roleId = 'image is required'
+  if (!formProps.itemType) {
+    errors.itemType = 'itemType is required'
   }
   return errors;
 }
 
 // const selector = formValueSelector('profile');
 
-export default connect(mapStateToProps, null)(reduxForm({ form: 'itemBase', validate })(ItemsBaseView));
+export default connect(mapStateToProps, null)(reduxForm({ form: 'LinkItemModifierToItemType', validate })(LinkItemModifierToItemTypeView));

@@ -43,6 +43,8 @@ import ClassDescriptionsView from './views/management/ClassDescription';
 import ClassesView from './views/management/Classes';
 import ItemsFamiliesView from './views/management/ItemFamily';
 import ItemsModifiersView from './views/management/ItemModifiers';
+import ItemsBaseView from './views/management/itemBase';
+import LinkItemModifierToItemTypeView from './views/management/LinkItemModifierToItemType'
 
 import Deposits from './views/functions/Deposits';
 import Withdrawals from './views/functions/Withdrawals';
@@ -168,6 +170,10 @@ const RoutesX = function (props) {
           element={<RanksManagementView />}
         />
         <Route
+          path="/management/item/base"
+          element={<ItemsBaseView />}
+        />
+        <Route
           path="/management/item/families"
           element={<ItemsFamiliesView />}
         />
@@ -175,6 +181,11 @@ const RoutesX = function (props) {
           path="/management/item/modifiers"
           element={<ItemsModifiersView />}
         />
+        <Route
+          path="/management/item/LinkItemModifierToItemType"
+          element={<LinkItemModifierToItemTypeView />}
+        />
+
         <Route
           path="/management/classes"
           element={<ClassesView />}
