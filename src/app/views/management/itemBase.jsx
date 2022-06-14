@@ -17,6 +17,10 @@ import {
   TableRow,
   TextField,
   FormControl,
+  InputLabel,
+  Select,
+  FormHelperText,
+  MenuItem,
 } from '@mui/material';
 
 import {
@@ -25,11 +29,19 @@ import {
 } from 'redux-form';
 
 import {
-  fetchClassDescriptionsAction,
-  addClassDescriptionAction,
-  updateClassDescriptionAction,
-  removeClassDescriptionAction,
-} from '../../actions/classDescriptions';
+  fetchItemBasesAction,
+  addItemBaseAction,
+  updateItemBaseAction,
+  removeItemBaseAction,
+} from '../../actions/itemBase';
+
+import {
+  fetchItemDifficultyAction,
+} from '../../actions/itemDifficulty';
+
+import {
+  fetchItemFamilyAction,
+} from '../../actions/itemFamily';
 
 const renderField = ({
   input, type, placeholder, meta: { touched, error },
@@ -52,10 +64,33 @@ const renderField = ({
   </div>
 );
 
+const renderSelectField = ({
+  input,
+  label,
+  meta: { touched, error },
+  children,
+  ...custom
+}) => (
+  <FormControl className="admin-form-field" style={{ width: '100%' }}>
+    <InputLabel error={touched && error}>{label}</InputLabel>
+    <Select
+      style={{ width: '100%' }}
+      floatingLabelText={label}
+      error={touched && error}
+      {...input}
+      children={children}
+      {...custom}
+    />
+    <FormHelperText error={touched && error}>{error}</FormHelperText>
+  </FormControl>
+)
+
 const ItemsBaseView = function (props) {
   const {
     auth,
-    classDescriptions,
+    itemBase,
+    itemFamily,
+    itemDifficulty,
     handleSubmit,
   } = props;
   const dispatch = useDispatch();
@@ -64,37 +99,80 @@ const ItemsBaseView = function (props) {
     rowKey: null,
   });
   const [unitName, setUnitName] = useState(null);
-  const [unitDescription, setUnitDescription] = useState(null);
-  const [unitImage, setUnitImage] = useState(null);
+  const [unitLevelReq, setUnitLevelReq] = useState(null);
+  const [unitLevelMonster, setUnitLevelMonster] = useState(null);
+
+  const [unitMinDefense, setUnitMinDefense] = useState(null);
+  const [unitMaxDefense, setUnitMaxDefense] = useState(null);
+  const [unitMinDamage, setUnitMinDamage] = useState(null);
+  const [unitMaxDamage, setUnitMaxDamage] = useState(null);
+
+  const [unitItemFamily, setUnitItemFamily] = useState(null);
+  const [unitItemDifficulty, setUnitItemDifficulty] = useState(null);
+
+  const [itemDifficultyId, setItemDifficultyId] = useState('All');
+  const [itemFamilyId, setItemFamilyId] = useState('All');
 
   const onEdit = ({
     id,
     currentUnitName,
-    currentUnitDescription,
-    currentUnitImage,
+    currentUnitLevelReq,
+    currentUnitLevelMonster,
+    currentUnitMinDefense,
+    currentUnitMaxDefense,
+    currentUnitMinDamage,
+    currentUnitMaxDamage,
+    currentUnitItemFamily,
+    currentUnitItemDifficulty,
   }) => {
     setInEditMode({
       status: true,
       rowKey: id,
     })
     setUnitName(currentUnitName);
-    setUnitDescription(currentUnitDescription);
-    setUnitImage(currentUnitImage);
+    setUnitLevelReq(currentUnitLevelReq);
+    setUnitLevelMonster(currentUnitLevelMonster);
+    setUnitMinDefense(currentUnitMinDefense);
+    setUnitMaxDefense(currentUnitMaxDefense);
+    setUnitMinDamage(currentUnitMinDamage);
+    setUnitMaxDamage(currentUnitMaxDamage);
+    setUnitItemFamily(currentUnitItemFamily);
+    setUnitItemDifficulty(currentUnitItemDifficulty);
   }
 
   const onRemove = async (id) => {
-    await dispatch(removeClassDescriptionAction(id));
+    await dispatch(removeItemBaseAction(id));
   }
 
   const onSave = async ({ id }) => {
-    await dispatch(updateClassDescriptionAction(id, unitName, unitDescription, unitImage));
+    console.log(itemDifficultyId);
+    console.log(itemFamilyId);
+    console.log('values');
+    await dispatch(updateItemBaseAction(
+      id,
+      unitName,
+      unitLevelReq,
+      unitLevelMonster,
+      unitMinDefense,
+      unitMaxDefense,
+      unitMinDamage,
+      unitMaxDamage,
+      itemDifficultyId,
+      itemFamilyId,
+    ));
     setInEditMode({
       status: false,
       rowKey: null,
     })
     setUnitName(null);
-    setUnitDescription(null);
-    setUnitImage(null);
+    setUnitLevelReq(null);
+    setUnitLevelMonster(null);
+    setUnitMinDefense(null);
+    setUnitMaxDefense(null);
+    setUnitMinDamage(null);
+    setUnitMaxDamage(null);
+    setUnitItemFamily(null);
+    setUnitItemDifficulty(null);
   }
 
   const onCancel = () => {
@@ -103,22 +181,39 @@ const ItemsBaseView = function (props) {
       rowKey: null,
     })
     setUnitName(null);
-    setUnitDescription(null);
-    setUnitImage(null);
+    setUnitLevelReq(null);
+    setUnitLevelMonster(null);
+    setUnitMinDefense(null);
+    setUnitMaxDefense(null);
+    setUnitMinDamage(null);
+    setUnitMaxDamage(null);
+    setUnitItemFamily(null);
+    setUnitItemDifficulty(null);
   }
 
   useEffect(() => {
-    dispatch(fetchClassDescriptionsAction());
+    dispatch(fetchItemDifficultyAction());
+    dispatch(fetchItemFamilyAction());
+    dispatch(fetchItemBasesAction());
   }, [
     auth,
   ]);
 
   useEffect(() => { }, [
-    classDescriptions,
+    itemBase,
+    itemFamily,
+    itemDifficulty,
   ]);
 
   const handleFormSubmit = async (obj) => {
-    await dispatch(addClassDescriptionAction(obj));
+    await dispatch(addItemBaseAction(obj));
+  }
+
+  const changeItemFamily = (val, preVal) => {
+    setItemFamilyId(preVal);
+  }
+  const changeItemDifficulty = (val, preVal) => {
+    setItemDifficultyId(preVal);
   }
 
   return (
@@ -135,19 +230,79 @@ const ItemsBaseView = function (props) {
           </Grid>
           <Grid item xs={4}>
             <Field
-              name="description"
+              name="levelReq"
               component={renderField}
               type="text"
-              placeholder="description"
+              placeholder="levelReq"
             />
           </Grid>
           <Grid item xs={4}>
             <Field
-              name="image"
+              name="levelMoster"
               component={renderField}
               type="text"
-              placeholder="image"
+              placeholder="levelMonster"
             />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="minDefense"
+              component={renderField}
+              type="text"
+              placeholder="minDefense"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="maxDefense"
+              component={renderField}
+              type="text"
+              placeholder="maxDefense"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="minDamage"
+              component={renderField}
+              type="text"
+              placeholder="minDamage"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="maxDamage"
+              component={renderField}
+              type="text"
+              placeholder="maxDamage"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="itemFamily"
+              component={renderSelectField}
+              onChange={(val, prevVal) => changeItemFamily(val, prevVal)}
+              label="itemFamily"
+            >
+              {itemFamily && itemFamily.data && itemFamily.data.map((server) => (
+                <MenuItem key={server.id} value={server.id}>
+                  {server.name}
+                </MenuItem>
+              ))}
+            </Field>
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="itemDifficulty"
+              component={renderSelectField}
+              onChange={(val, prevVal) => changeItemDifficulty(val, prevVal)}
+              label="itemDifficulty"
+            >
+              {itemDifficulty && itemDifficulty.data && itemDifficulty.data.map((server) => (
+                <MenuItem key={server.id} value={server.id}>
+                  {server.name}
+                </MenuItem>
+              ))}
+            </Field>
           </Grid>
           <Grid item xs={6}>
             <Button
@@ -174,16 +329,22 @@ const ItemsBaseView = function (props) {
             <TableRow>
               <TableCell>id</TableCell>
               <TableCell align="right">name</TableCell>
-              <TableCell align="right">description</TableCell>
-              <TableCell align="right">image</TableCell>
+              <TableCell align="right">levelReq</TableCell>
+              <TableCell align="right">levelMoster</TableCell>
+              <TableCell align="right">minDefense</TableCell>
+              <TableCell align="right">maxDefense</TableCell>
+              <TableCell align="right">minDamage</TableCell>
+              <TableCell align="right">maxDamage</TableCell>
+              <TableCell align="right">itemFamily</TableCell>
+              <TableCell align="right">itemDifficulty</TableCell>
               <TableCell align="right">last updated</TableCell>
               <TableCell align="right">edit/remove</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {classDescriptions
-              && classDescriptions.data
-              && classDescriptions.data.map((rank, i) => {
+            {itemBase
+              && itemBase.data
+              && itemBase.data.map((rank, i) => {
                 console.log(rank);
                 return (
                   <TableRow key={i}>
@@ -207,12 +368,12 @@ const ItemsBaseView = function (props) {
                       {
                         inEditMode.status && inEditMode.rowKey === rank.id ? (
                           <TextField
-                            value={unitDescription}
-                            onChange={(event) => setUnitDescription(event.target.value)}
+                            value={unitLevelReq}
+                            onChange={(event) => setUnitLevelReq(event.target.value)}
                           />
 
                         ) : (
-                          rank.description
+                          rank.levelReq
                         )
                       }
                     </TableCell>
@@ -220,12 +381,104 @@ const ItemsBaseView = function (props) {
                       {
                         inEditMode.status && inEditMode.rowKey === rank.id ? (
                           <TextField
-                            value={unitImage}
-                            onChange={(event) => setUnitImage(event.target.value)}
+                            value={unitLevelMonster}
+                            onChange={(event) => setUnitLevelMonster(event.target.value)}
                           />
 
                         ) : (
-                          rank.image
+                          rank.levelMonster
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMinDefense}
+                            onChange={(event) => setUnitMinDefense(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.minDefense
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMaxDefense}
+                            onChange={(event) => setUnitMaxDefense(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.maxDefense
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMinDamage}
+                            onChange={(event) => setUnitMinDamage(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.minDamage
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMaxDamage}
+                            onChange={(event) => setUnitMaxDamage(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.maxDamage
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <Field
+                            name="itemFamily"
+                            component={renderSelectField}
+                            onChange={(val, prevVal) => changeItemFamily(val, prevVal)}
+                            label="itemFamily"
+                          >
+                            {itemFamily && itemFamily.data && itemFamily.data.map((server) => (
+                              <MenuItem key={server.id} value={server.id}>
+                                {server.name}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        ) : (
+                          <span>{rank.itemQuality && rank.itemQuality.name}</span>
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <Field
+                            name="itemDifficulty"
+                            component={renderSelectField}
+                            onChange={(val, prevVal) => changeItemDifficulty(val, prevVal)}
+                            label="itemDifficulty"
+                          >
+                            {itemDifficulty && itemDifficulty.data && itemDifficulty.data.map((server) => (
+                              <MenuItem key={server.id} value={server.id}>
+                                {server.name}
+                              </MenuItem>
+                            ))}
+                          </Field>
+                        ) : (
+                          <span>{rank.itemQuality && rank.itemQuality.name}</span>
                         )
                       }
                     </TableCell>
@@ -245,8 +498,14 @@ const ItemsBaseView = function (props) {
                               onClick={() => onSave({
                                 id: rank.id,
                                 name: unitName,
-                                description: unitDescription,
-                                image: unitImage,
+                                levelReq: unitLevelReq,
+                                levelMonster: unitLevelMonster,
+                                minDefense: unitMinDefense,
+                                maxDefense: unitMaxDefense,
+                                minDamage: unitMinDamage,
+                                maxDamage: unitMaxDamage,
+                                itemFamily: itemFamilyId,
+                                itemDifficulty: itemDifficultyId,
                               })}
                             >
                               Save
@@ -271,8 +530,14 @@ const ItemsBaseView = function (props) {
                               onClick={() => onEdit({
                                 id: rank.id,
                                 currentUnitName: rank.name,
-                                currentUnitDescription: rank.description,
-                                currentUnitImage: rank.image,
+                                currentUnitLevelReq: rank.levelReq,
+                                currentUnitLevelMonster: rank.levelMonster,
+                                currentUnitMinDefense: rank.minDefense,
+                                currentUnitMaxDefense: rank.maxDefense,
+                                currentUnitMinDamage: rank.minDamage,
+                                currentUnitMaxDamage: rank.maxDamage,
+                                currentUnitItemFamily: rank.itemFamily.id,
+                                currentUnitItemDifficulty: rank.itemDifficulty.id,
                               })}
                             >
                               Edit
@@ -304,7 +569,9 @@ const ItemsBaseView = function (props) {
 function mapStateToProps(state) {
   return {
     auth: state.auth,
-    classDescriptions: state.classDescriptions,
+    itemBase: state.itemBase,
+    itemFamily: state.itemFamily,
+    itemDifficulty: state.itemDifficulty,
   };
 }
 
@@ -313,11 +580,11 @@ const validate = (formProps) => {
   if (!formProps.name) {
     errors.name = 'Name is required'
   }
-  if (!formProps.description) {
-    errors.description = 'description is required'
+  if (!formProps.itemFamily) {
+    errors.itemFamily = 'Name is itemFamily'
   }
-  if (!formProps.image) {
-    errors.roleId = 'image is required'
+  if (!formProps.itemDifficulty) {
+    errors.itemDifficulty = 'Name is itemDifficulty'
   }
   return errors;
 }

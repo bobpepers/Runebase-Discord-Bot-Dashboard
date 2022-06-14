@@ -42,6 +42,8 @@ import itemFamily from './itemFamily';
 import itemQuality from './itemQuality';
 import itemModifier from './itemModifier';
 import itemModifierItemType from './itemModifierItemType';
+import itemBase from './itemBase';
+import itemDifficulty from './itemDifficulty';
 
 const store = configureStore({
   reducer: {
@@ -84,11 +86,14 @@ const store = configureStore({
     ranks,
     classDescriptions,
     classes,
+
     itemType,
     itemFamily,
     itemQuality,
     itemModifier,
     itemModifierItemType,
+    itemBase,
+    itemDifficulty,
   },
 })
 

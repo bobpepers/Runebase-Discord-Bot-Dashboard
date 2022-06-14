@@ -489,7 +489,7 @@ const ItemsModifiersView = function (props) {
                           />
 
                         ) : (
-                          rank.maxStength
+                          rank.maxStrength
                         )
                       }
                     </TableCell>
