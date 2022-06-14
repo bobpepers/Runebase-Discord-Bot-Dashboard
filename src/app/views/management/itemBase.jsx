@@ -102,6 +102,11 @@ const ItemsBaseView = function (props) {
   const [unitLevelReq, setUnitLevelReq] = useState(null);
   const [unitLevelMonster, setUnitLevelMonster] = useState(null);
 
+  const [unitStrengthReq, setUnitStrengthReq] = useState(null);
+  const [unitDexterityReq, setUnitDexterityReq] = useState(null);
+  const [unitDurability, setUnitDurability] = useState(null);
+  const [unitSockets, setUnitSockets] = useState(null);
+
   const [unitMinDefense, setUnitMinDefense] = useState(null);
   const [unitMaxDefense, setUnitMaxDefense] = useState(null);
   const [unitMinDamage, setUnitMinDamage] = useState(null);
@@ -117,7 +122,11 @@ const ItemsBaseView = function (props) {
     id,
     currentUnitName,
     currentUnitLevelReq,
+    currentUnitStrengthReq,
+    currentUnitDexterityReq,
     currentUnitLevelMonster,
+    currentUnitDurability,
+    currentUnitSockets,
     currentUnitMinDefense,
     currentUnitMaxDefense,
     currentUnitMinDamage,
@@ -131,7 +140,11 @@ const ItemsBaseView = function (props) {
     })
     setUnitName(currentUnitName);
     setUnitLevelReq(currentUnitLevelReq);
+    setUnitStrengthReq(currentUnitStrengthReq);
+    setUnitDexterityReq(currentUnitDexterityReq);
     setUnitLevelMonster(currentUnitLevelMonster);
+    setUnitDurability(currentUnitDurability);
+    setUnitSockets(currentUnitSockets);
     setUnitMinDefense(currentUnitMinDefense);
     setUnitMaxDefense(currentUnitMaxDefense);
     setUnitMinDamage(currentUnitMinDamage);
@@ -152,7 +165,11 @@ const ItemsBaseView = function (props) {
       id,
       unitName,
       unitLevelReq,
+      unitStrengthReq,
+      unitDexterityReq,
       unitLevelMonster,
+      unitDurability,
+      unitSockets,
       unitMinDefense,
       unitMaxDefense,
       unitMinDamage,
@@ -166,7 +183,11 @@ const ItemsBaseView = function (props) {
     })
     setUnitName(null);
     setUnitLevelReq(null);
+    setUnitStrengthReq(null);
+    setUnitDexterityReq(null);
     setUnitLevelMonster(null);
+    setUnitDurability(null);
+    setUnitSockets(null);
     setUnitMinDefense(null);
     setUnitMaxDefense(null);
     setUnitMinDamage(null);
@@ -182,7 +203,11 @@ const ItemsBaseView = function (props) {
     })
     setUnitName(null);
     setUnitLevelReq(null);
+    setUnitStrengthReq(null);
+    setUnitDexterityReq(null);
     setUnitLevelMonster(null);
+    setUnitDurability(null);
+    setUnitSockets(null);
     setUnitMinDefense(null);
     setUnitMaxDefense(null);
     setUnitMinDamage(null);
@@ -238,10 +263,42 @@ const ItemsBaseView = function (props) {
           </Grid>
           <Grid item xs={4}>
             <Field
-              name="levelMoster"
+              name="strengthReq"
+              component={renderField}
+              type="text"
+              placeholder="strengthReq"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="dexterityReq"
+              component={renderField}
+              type="text"
+              placeholder="dexterityReq"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="levelMonster"
               component={renderField}
               type="text"
               placeholder="levelMonster"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="durability"
+              component={renderField}
+              type="text"
+              placeholder="durability"
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Field
+              name="sockets"
+              component={renderField}
+              type="text"
+              placeholder="sockets"
             />
           </Grid>
           <Grid item xs={4}>
@@ -330,7 +387,11 @@ const ItemsBaseView = function (props) {
               <TableCell>id</TableCell>
               <TableCell align="right">name</TableCell>
               <TableCell align="right">levelReq</TableCell>
-              <TableCell align="right">levelMoster</TableCell>
+              <TableCell align="right">strengthReq</TableCell>
+              <TableCell align="right">dexterityReq</TableCell>
+              <TableCell align="right">levelMonster</TableCell>
+              <TableCell align="right">durability</TableCell>
+              <TableCell align="right">sockets</TableCell>
               <TableCell align="right">minDefense</TableCell>
               <TableCell align="right">maxDefense</TableCell>
               <TableCell align="right">minDamage</TableCell>
@@ -381,12 +442,64 @@ const ItemsBaseView = function (props) {
                       {
                         inEditMode.status && inEditMode.rowKey === rank.id ? (
                           <TextField
+                            value={unitStrengthReq}
+                            onChange={(event) => setUnitStrengthReq(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.strengthReq
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitDexterityReq}
+                            onChange={(event) => setUnitDexterityReq(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.dexterityReq
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
                             value={unitLevelMonster}
                             onChange={(event) => setUnitLevelMonster(event.target.value)}
                           />
 
                         ) : (
                           rank.levelMonster
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitDurability}
+                            onChange={(event) => setUnitDurability(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.durability
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitSockets}
+                            onChange={(event) => setUnitSockets(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.sockets
                         )
                       }
                     </TableCell>
@@ -458,7 +571,7 @@ const ItemsBaseView = function (props) {
                             ))}
                           </Field>
                         ) : (
-                          <span>{rank.itemQuality && rank.itemQuality.name}</span>
+                          <span>{rank.itemFamily && rank.itemFamily.name}</span>
                         )
                       }
                     </TableCell>
@@ -478,7 +591,7 @@ const ItemsBaseView = function (props) {
                             ))}
                           </Field>
                         ) : (
-                          <span>{rank.itemQuality && rank.itemQuality.name}</span>
+                          <span>{rank.itemDifficulty && rank.itemDifficulty.name}</span>
                         )
                       }
                     </TableCell>
@@ -499,7 +612,11 @@ const ItemsBaseView = function (props) {
                                 id: rank.id,
                                 name: unitName,
                                 levelReq: unitLevelReq,
+                                strengthReq: unitStrengthReq,
+                                dexterityReq: unitDexterityReq,
                                 levelMonster: unitLevelMonster,
+                                durability: unitDurability,
+                                sockets: unitSockets,
                                 minDefense: unitMinDefense,
                                 maxDefense: unitMaxDefense,
                                 minDamage: unitMinDamage,
@@ -531,7 +648,11 @@ const ItemsBaseView = function (props) {
                                 id: rank.id,
                                 currentUnitName: rank.name,
                                 currentUnitLevelReq: rank.levelReq,
+                                currentUnitStrengthReq: rank.strengthReq,
+                                currentUnitDexterityReq: rank.dexterityReq,
                                 currentUnitLevelMonster: rank.levelMonster,
+                                currentUnitDurability: rank.durability,
+                                currentUnitSockets: rank.sockets,
                                 currentUnitMinDefense: rank.minDefense,
                                 currentUnitMaxDefense: rank.maxDefense,
                                 currentUnitMinDamage: rank.minDamage,
