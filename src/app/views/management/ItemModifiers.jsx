@@ -108,6 +108,13 @@ const ItemsModifiersView = function (props) {
 
   const [unitMinEnergy, setUnitMinEnergy] = useState(null);
   const [unitMaxEnergy, setUnitMaxEnergy] = useState(null);
+
+  const [unitMinEdefense, setUnitMinEdefense] = useState(null);
+  const [unitMaxEdefense, setUnitMaxEdefense] = useState(null);
+
+  const [unitMinEdamage, setUnitMinEdamage] = useState(null);
+  const [unitMaxEdamage, setUnitMaxEdamage] = useState(null);
+
   const [itemQualityId, setItemQualityId] = useState('');
 
   const onEdit = ({
@@ -125,6 +132,10 @@ const ItemsModifiersView = function (props) {
     currentUnitMaxVitality,
     currentUnitMinEnergy,
     currentUnitMaxEnergy,
+    currentUnitMinEdefense,
+    currentUnitMaxEdefense,
+    currentUnitMinEdamage,
+    currentUnitMaxEdamage,
   }) => {
     setInEditMode({
       status: true,
@@ -143,6 +154,10 @@ const ItemsModifiersView = function (props) {
     setUnitMaxVitality(currentUnitMaxVitality);
     setUnitMinEnergy(currentUnitMinEnergy);
     setUnitMaxEnergy(currentUnitMaxEnergy);
+    setUnitMinEdefense(currentUnitMinEdefense);
+    setUnitMaxEdefense(currentUnitMaxEdefense);
+    setUnitMinEdamage(currentUnitMinEdamage);
+    setUnitMaxEdamage(currentUnitMaxEdamage);
   }
 
   const onRemove = async (id) => {
@@ -165,6 +180,10 @@ const ItemsModifiersView = function (props) {
       unitMaxVitality,
       unitMinEnergy,
       unitMaxEnergy,
+      unitMinEdefense,
+      unitMaxEdefense,
+      unitMinEdamage,
+      unitMaxEdamage,
     ));
     setInEditMode({
       status: false,
@@ -183,6 +202,10 @@ const ItemsModifiersView = function (props) {
     setUnitMaxVitality(null);
     setUnitMinEnergy(null);
     setUnitMaxEnergy(null);
+    setUnitMinEdefense(null);
+    setUnitMaxEdefense(null);
+    setUnitMinEdamage(null);
+    setUnitMaxEdamage(null);
   }
 
   const onCancel = () => {
@@ -203,6 +226,10 @@ const ItemsModifiersView = function (props) {
     setUnitMaxVitality(null);
     setUnitMinEnergy(null);
     setUnitMaxEnergy(null);
+    setUnitMinEdefense(null);
+    setUnitMaxEdefense(null);
+    setUnitMinEdamage(null);
+    setUnitMaxEdamage(null);
   }
 
   useEffect(() => {
@@ -339,6 +366,38 @@ const ItemsModifiersView = function (props) {
               placeholder="maxEnergy"
             />
           </Grid>
+          <Grid item xs={2}>
+            <Field
+              name="minEdefense"
+              component={renderField}
+              type="text"
+              placeholder="minEdefense"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Field
+              name="maxEdefense"
+              component={renderField}
+              type="text"
+              placeholder="maxEdefense"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Field
+              name="minEdamage"
+              component={renderField}
+              type="text"
+              placeholder="minEdamage"
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Field
+              name="maxEdamage"
+              component={renderField}
+              type="text"
+              placeholder="maxEdamage"
+            />
+          </Grid>
           <Grid item xs={6}>
             <Button
               variant="contained"
@@ -376,6 +435,10 @@ const ItemsModifiersView = function (props) {
               <TableCell align="right">maxVitality</TableCell>
               <TableCell align="right">minEnergy</TableCell>
               <TableCell align="right">maxEnergy</TableCell>
+              <TableCell align="right">minEdefense</TableCell>
+              <TableCell align="right">maxEdefense</TableCell>
+              <TableCell align="right">minEdamage</TableCell>
+              <TableCell align="right">maxEdamage</TableCell>
               <TableCell align="right">last updated</TableCell>
               <TableCell align="right">edit/remove</TableCell>
             </TableRow>
@@ -577,6 +640,59 @@ const ItemsModifiersView = function (props) {
                         )
                       }
                     </TableCell>
+                    <TableCell component="th" scope="row" align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMinEdefense}
+                            onChange={(event) => setUnitMinEdefense(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.minEdefense
+                        )
+                      }
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMaxEdefense}
+                            onChange={(event) => setUnitMaxEdefense(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.maxEdefense
+                        )
+                      }
+                    </TableCell>
+
+                    <TableCell component="th" scope="row" align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMinEdamage}
+                            onChange={(event) => setUnitMinEdamage(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.minEdamage
+                        )
+                      }
+                    </TableCell>
+                    <TableCell component="th" scope="row" align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === rank.id ? (
+                          <TextField
+                            value={unitMaxEdamage}
+                            onChange={(event) => setUnitMaxEdamage(event.target.value)}
+                          />
+
+                        ) : (
+                          rank.maxEdamage
+                        )
+                      }
+                    </TableCell>
 
                     <TableCell align="right">
                       {
@@ -606,6 +722,10 @@ const ItemsModifiersView = function (props) {
                                 maxVitality: unitMaxVitality,
                                 minEnergy: unitMinEnergy,
                                 maxEnergy: unitMaxEnergy,
+                                minEdefense: unitMinEdefense,
+                                maxEdefense: unitMaxEdefense,
+                                minEdamage: unitMinEdamage,
+                                maxEdamage: unitMaxEdamage,
                               })}
                             >
                               Save
@@ -629,7 +749,7 @@ const ItemsModifiersView = function (props) {
                               size="large"
                               onClick={() => onEdit({
                                 id: rank.id,
-                                currentUnitItemQuality: rank.itemQuality,
+                                currentUnitItemQuality: rank.itemQuality.id,
                                 currentUnitLevelReq: rank.levelReq,
                                 currentUnitLevelMonster: rank.levelMonster,
                                 currentUnitPrefix: rank.prefix,
@@ -642,6 +762,10 @@ const ItemsModifiersView = function (props) {
                                 currentUnitMaxVitality: rank.maxVitality,
                                 currentUnitMinEnergy: rank.minEnergy,
                                 currentUnitMaxEnergy: rank.maxEnergy,
+                                currentUnitMinEdefense: rank.minEdefense,
+                                currentUnitMaxEdefense: rank.maxEdefense,
+                                currentUnitMinEdamage: rank.minEdamage,
+                                currentUnitMaxEdamage: rank.maxEdamage,
                               })}
                             >
                               Edit

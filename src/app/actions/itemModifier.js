@@ -55,14 +55,44 @@ export function addItemModifierAction(obj) {
 
 export function updateItemModifierAction(
   id,
-  name,
-  itemType,
+  itemQuality,
+  levelReq,
+  levelMonster,
+  prefix,
+  suffix,
+  minStrength,
+  maxStrength,
+  minDexterity,
+  maxDexterity,
+  minVitality,
+  maxVitality,
+  minEnergy,
+  maxEnergy,
+  minEdefense,
+  maxEdefense,
+  minEdamage,
+  maxEdamage,
 ) {
   return function (dispatch) {
     axios.post(`${window.myConfig.apiUrl}/management/item/modifier/update`, {
       id,
-      name,
-      itemType,
+      itemQuality,
+      levelReq,
+      levelMonster,
+      prefix,
+      suffix,
+      minStrength,
+      maxStrength,
+      minDexterity,
+      maxDexterity,
+      minVitality,
+      maxVitality,
+      minEnergy,
+      maxEnergy,
+      minEdefense,
+      maxEdefense,
+      minEdamage,
+      maxEdamage,
     })
       .then((response) => {
         dispatch({
