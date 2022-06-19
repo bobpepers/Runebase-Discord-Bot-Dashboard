@@ -44,6 +44,7 @@ import itemModifier from './itemModifier';
 import itemModifierItemType from './itemModifierItemType';
 import itemBase from './itemBase';
 import itemDifficulty from './itemDifficulty';
+import skilltrees from './skilltrees';
 
 const store = configureStore({
   reducer: {
@@ -94,6 +95,7 @@ const store = configureStore({
     itemModifierItemType,
     itemBase,
     itemDifficulty,
+    skilltrees,
   },
 })
 

@@ -200,6 +200,14 @@ const Header = function (props) {
               </Link>
               <Link
                 className="nav-link"
+                to="/management/skilltrees"
+              >
+                <MenuItem onClick={handleCloseManagement}>
+                  Skill Trees
+                </MenuItem>
+              </Link>
+              <Link
+                className="nav-link"
                 to="/management/item/base"
               >
                 <MenuItem onClick={handleCloseManagement}>

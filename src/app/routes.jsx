@@ -44,6 +44,7 @@ import ClassesView from './views/management/Classes';
 import ItemsFamiliesView from './views/management/ItemFamily';
 import ItemsModifiersView from './views/management/ItemModifiers';
 import ItemsBaseView from './views/management/itemBase';
+import SkillTreesView from './views/management/SkillTrees';
 import LinkItemModifierToItemTypeView from './views/management/LinkItemModifierToItemType'
 
 import Deposits from './views/functions/Deposits';
@@ -168,6 +169,10 @@ const RoutesX = function (props) {
         <Route
           path="/management/ranks"
           element={<RanksManagementView />}
+        />
+        <Route
+          path="/management/skilltrees"
+          element={<SkillTreesView />}
         />
         <Route
           path="/management/item/base"
