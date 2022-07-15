@@ -10,15 +10,15 @@ import {
 } from './types/index';
 import { notistackErrorAdd } from './helpers/notistackError';
 
-export function fetchRanksAction() {
+export function fetchRanksAction(
+  serverId,
+) {
   return function (dispatch) {
     dispatch({
       type: FETCH_RANKS_BEGIN,
     });
     axios.post(`${window.myConfig.apiUrl}/management/ranks`, {
-      // id,
-      // channelId,
-      // channelName
+      serverId,
     }).then((response) => {
       dispatch({
         type: FETCH_RANKS_SUCCESS,
@@ -73,6 +73,7 @@ export function addRankAction(obj) {
 
 export function updateRankAction(
   id,
+  level,
   name,
   expNeeded,
   roleId,
@@ -80,6 +81,7 @@ export function updateRankAction(
   return function (dispatch) {
     axios.post(`${window.myConfig.apiUrl}/management/rank/update`, {
       id,
+      level,
       name,
       expNeeded,
       roleId,

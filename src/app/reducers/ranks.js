@@ -57,6 +57,7 @@ export default (state = initialState, action) => {
     case FETCH_RANKS_FAIL:
       return {
         ...state,
+        data: [],
         error: action.error,
         isFetching: false,
       };
