@@ -63,3 +63,47 @@ export function banServerAction(id, banMessage = '') {
       });
   }
 }
+
+export function activeOrDeactivateRealmAction(id) {
+  return function (dispatch) {
+    axios.post(`${window.myConfig.apiUrl}/management/server/realm/active-deactivate`, {
+      id,
+    })
+      .then((response) => {
+        dispatch({
+          type: UPDATE_SERVER,
+          payload: response.data.result,
+        });
+      }).catch((error) => {
+        notistackErrorAdd(
+          dispatch,
+          error,
+        );
+      });
+  }
+}
+
+export function updateServerAction(
+  id,
+  inviteLink,
+  expRewardChannelId,
+) {
+  return function (dispatch) {
+    axios.post(`${window.myConfig.apiUrl}/management/server/update`, {
+      id,
+      inviteLink,
+      expRewardChannelId,
+    })
+      .then((response) => {
+        dispatch({
+          type: UPDATE_SERVER,
+          payload: response.data.result,
+        });
+      }).catch((error) => {
+        notistackErrorAdd(
+          dispatch,
+          error,
+        );
+      });
+  }
+}

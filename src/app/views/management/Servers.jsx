@@ -18,6 +18,7 @@ import { withRouter } from '../../hooks/withRouter';
 import {
   fetchServerAction,
   banServerAction,
+  activeOrDeactivateRealmAction,
 } from '../../actions/servers';
 import ServerTable from '../../components/management/ServerTable';
 
@@ -87,6 +88,10 @@ function ServersView(props) {
     console.log(banMessage);
     console.log('bannMessage');
     dispatch(banServerAction(id, banMessage))
+  };
+
+  const activeOrDeactivateRealm = (id) => {
+    dispatch(activeOrDeactivateRealmAction(id))
   };
 
   return (
@@ -167,6 +172,7 @@ function ServersView(props) {
                   setRowsPerPage={setRowsPerPage}
                   totalCount={servers && servers.count && servers.count}
                   banServer={banServer}
+                  activeOrDeactivateRealm={activeOrDeactivateRealm}
                   servers={servers
                     && servers.data
                     ? servers.data

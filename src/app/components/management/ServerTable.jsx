@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@mui/styles';
 import {
+  useDispatch,
+} from 'react-redux';
+import {
   Table,
   Button,
   TableBody,
@@ -14,9 +17,13 @@ import {
   TableSortLabel,
   FormControlLabel,
   Switch,
+  TextField,
 } from '@mui/material';
-import { Link } from 'react-router-dom';
 import BanDialog from './BanDialog';
+
+import {
+  updateServerAction,
+} from '../../actions/servers';
 
 const headCells = [
   {
@@ -29,6 +36,12 @@ const headCells = [
     id: 'serverName', numeric: true, disablePadding: false, label: 'server name',
   },
   {
+    id: 'inviteLink', numeric: true, disablePadding: false, label: 'invite link',
+  },
+  {
+    id: 'expRewardChannelId', numeric: true, disablePadding: false, label: 'expRewardChannelId',
+  },
+  {
     id: 'lastActive', numeric: true, disablePadding: false, label: 'last active',
   },
 ];
@@ -37,6 +50,9 @@ function createData(
   id,
   groupId,
   groupName,
+  inviteLink,
+  expRewardChannelId,
+  activeRealm,
   lastActive,
   banned,
 ) {
@@ -44,6 +60,9 @@ function createData(
     id,
     groupId,
     groupName,
+    inviteLink,
+    expRewardChannelId,
+    activeRealm,
     lastActive,
     banned,
   };
@@ -152,6 +171,7 @@ function ServerTable(props) {
   const {
     servers,
     banServer,
+    activeOrDeactivateRealm,
     defaultPageSize,
     page,
     setPage,
@@ -169,6 +189,9 @@ function ServerTable(props) {
         item.id,
         item.groupId,
         item.groupName,
+        item.inviteLink,
+        item.expRewardChannelId,
+        item.activeRealm,
         item.lastActive,
         item.banned,
       ),
@@ -180,6 +203,49 @@ function ServerTable(props) {
   const [orderBy, setOrderBy] = useState('id');
   const [selected, setSelected] = useState([]);
   const [dense, setDense] = useState(false);
+  const dispatch = useDispatch();
+  const [inEditMode, setInEditMode] = useState({
+    status: false,
+    rowKey: null,
+  });
+  const [unitInviteLink, setUnitInviteLink] = useState(null);
+  const [unitExpRewardChannelId, setUnitExpRewardChannelId] = useState(null);
+
+  const onEdit = ({
+    id,
+    currentUnitInviteLink,
+    cuurentUnitExpRewardChannelId,
+  }) => {
+    setInEditMode({
+      status: true,
+      rowKey: id,
+    })
+    setUnitInviteLink(currentUnitInviteLink);
+    setUnitExpRewardChannelId(cuurentUnitExpRewardChannelId);
+  }
+
+  const onSave = async ({ id }) => {
+    await dispatch(updateServerAction(
+      id,
+      unitInviteLink,
+      unitExpRewardChannelId,
+    ));
+    setInEditMode({
+      status: false,
+      rowKey: null,
+    })
+    setUnitInviteLink(null);
+    setUnitExpRewardChannelId(null);
+  }
+
+  const onCancel = () => {
+    setInEditMode({
+      status: false,
+      rowKey: null,
+    })
+    setUnitInviteLink(null);
+    setUnitExpRewardChannelId(null);
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -272,26 +338,113 @@ function ServerTable(props) {
                     </TableCell>
                     <TableCell align="right">{row.groupId}</TableCell>
                     <TableCell align="right">{row.groupName}</TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.id ? (
+                          <TextField
+                            value={unitInviteLink}
+                            onChange={(event) => setUnitInviteLink(event.target.value)}
+                          />
+
+                        ) : (
+                          row.inviteLink
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.id ? (
+                          <TextField
+                            value={unitExpRewardChannelId}
+                            onChange={(event) => setUnitExpRewardChannelId(event.target.value)}
+                          />
+
+                        ) : (
+                          row.expRewardChannelId
+                        )
+                      }
+                    </TableCell>
 
                     <TableCell align="right">
                       {row.lastActive}
                     </TableCell>
                     <TableCell align="right">
-                      {!row.banned ? (
-                        <BanDialog
-                          name={row.groupName}
-                          confirmBan={banServer}
-                          otherId={row.groupId}
-                          id={row.id}
-                        />
-                      ) : (
-                        <Button
-                          variant="outlined"
-                          onClick={() => banServer(row.id, '')}
-                        >
-                          UNBAN
-                        </Button>
-                      )}
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.id ? (
+                          <>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="large"
+                              onClick={() => onSave({
+                                id: row.id,
+                                level: unitInviteLink,
+                                expRewardChannelId: unitExpRewardChannelId,
+                              })}
+                            >
+                              Save
+                            </Button>
+
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="large"
+                              style={{ marginLeft: 8 }}
+                              onClick={() => onCancel()}
+                            >
+                              Cancel
+                            </Button>
+                          </>
+                        ) : (
+                          <>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="large"
+                              onClick={() => onEdit({
+                                id: row.id,
+                                currentUnitInviteLink: row.inviteLink,
+                                currentUnitExpRewardChannelId: row.expRewardChannelId,
+                              })}
+                            >
+                              Edit
+                            </Button>
+                            {!row.banned ? (
+                              <BanDialog
+                                name={row.groupName}
+                                confirmBan={banServer}
+                                otherId={row.groupId}
+                                id={row.id}
+                              />
+                            ) : (
+                              <Button
+                                variant="outlined"
+                                onClick={() => banServer(row.id, '')}
+                              >
+                                UNBAN
+                              </Button>
+                            )}
+
+                            {!row.activeRealm ? (
+                              <Button
+                                variant="outlined"
+                                onClick={() => activeOrDeactivateRealm(row.id)}
+                              >
+                                Activate Realm
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="outlined"
+                                onClick={() => activeOrDeactivateRealm(row.id)}
+                              >
+                                Deactivate Realm
+                              </Button>
+                            )}
+
+                          </>
+                        )
+                      }
+
                     </TableCell>
                   </TableRow>
                 );

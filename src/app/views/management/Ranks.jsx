@@ -24,6 +24,7 @@ import {
 import {
   reduxForm,
   Field,
+  change,
 } from 'redux-form';
 
 import {
@@ -39,25 +40,37 @@ import {
 } from '../../actions/servers';
 
 const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
+  input,
+  type,
+  placeholder,
+  meta,
+  disabled,
+}) => {
+  // console.log(input);
+  console.log(disabled);
+  return (
+    <div className={`input-group ${meta.touched && meta.error ? 'has-error' : ''}`}>
+      <FormControl
         variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
+        fullWidth
+      >
+        <TextField
+          // className="outlined-email-field"
+          label={placeholder}
+          type={type}
+          variant="outlined"
+          inputProps={{
+            className: 'outlined-email-field',
+            value: meta.initial,
+          }}
+          disabled={disabled}
+          {...input}
+        />
+        {meta.touched && meta.error && <div className="form-error">{meta.error}</div>}
+      </FormControl>
+    </div>
+  )
+};
 
 const RanksManagementView = function (props) {
   const {
@@ -135,6 +148,7 @@ const RanksManagementView = function (props) {
     dispatch(fetchRanksAction(
       unitServerId,
     ));
+    dispatch(change('ranks', 'groupId', unitServerId));
   }, [
     unitServerId,
   ]);
@@ -159,6 +173,9 @@ const RanksManagementView = function (props) {
   ]);
 
   const handleFormSubmit = async (obj) => {
+    change('ranks', 'groupId', unitServerId);
+    await dispatch(change('ranks', 'groupId', unitServerId));
+    console.log(obj);
     await dispatch(
       addRankAction(obj),
     );
@@ -226,6 +243,18 @@ const RanksManagementView = function (props) {
                   component={renderField}
                   type="text"
                   placeholder="roleId"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="groupId"
+                  component={renderField}
+                  type="text"
+                  placeholder="groupId"
+                  meta={{ initial: `${unitServerId}` }}
+                  props={{
+                    disabled: true, // like this
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -403,6 +432,9 @@ function mapStateToProps(state) {
     auth: state.auth,
     ranks: state.ranks,
     servers: state.servers,
+    initialValues: {
+      groupId: 0,
+    },
   };
 }
 
@@ -425,4 +457,8 @@ const validate = (formProps) => {
 
 // const selector = formValueSelector('profile');
 
-export default connect(mapStateToProps, null)(reduxForm({ form: 'priceCurrencies', validate })(RanksManagementView));
+export default connect(mapStateToProps, null)(reduxForm({
+  form: 'ranks',
+  enableReinitialize: true,
+  validate,
+})(RanksManagementView));
