@@ -7,12 +7,19 @@
     "compile": "lingui compile",
     "dev": "webpack serve --mode development --env development --config ./webpack/webpack-dev.config.js --color",
     "build": "rm -rf dist && node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config ./webpack/webpack-prod.config.js",
-    "start": "NODE_ENV=production PORT=3000 pm2 start ./server.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch",
     "lint": "eslint src test webpack",
     "lint:fix": "eslint src test webpack --fix --ext .js,.jsx .",
-    "fix-js": "eslint-auto-fix"
+    "fix-js": "eslint-auto-fix",
+    "standard-version": "standard-version --commit-all",
+    "pre-release:minor": "standard-version --commit-all --release-as minor",
+    "pre-release:patch": "standard-version --commit-all --release-as patch",
+    "pre-release:major": "standard-version --commit-all --release-as major",
+    "release": "npm-run-all build standard-version",
+    "release:minor": "npm-run-all build pre-release:minor",
+    "release:patch": "npm-run-all build pre-release:patch",
+    "release:major": "npm-run-all build pre-release:major"
   },
   "keywords": [
     "MySQL",
@@ -32,7 +39,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bobpepers/runes-tip-dashboard"
+    "url": "git+https://github.com/bobpepers/Runebase-Discord-Bot-dashboard"
   },
   "author": "Jonas Collier",
   "license": "MIT",
