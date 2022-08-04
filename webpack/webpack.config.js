@@ -171,17 +171,17 @@ module.exports = (options) => {
     //  new Webpack.optimize.OccurrenceOrderPlugin(),
     // );
 
-    webpackConfig.plugins.push(
-      new CopyPlugin({
-        patterns: [
-          {
-            from: Path.join(__dirname, '../static'),
-            to: Path.join(__dirname, '../dist/static'),
-            // context: 'app/',
-          },
-        ],
-      }),
-    );
+    // webpackConfig.plugins.push(
+    //   new CopyPlugin({
+    //     patterns: [
+    //       {
+    //         from: Path.join(__dirname, '../static'),
+    //         to: Path.join(__dirname, '../dist/static'),
+    //         // context: 'app/',
+    //       },
+    //     ],
+    //   }),
+    // );
 
     webpackConfig.module.rules.push({
       test: /\.scss$/,
