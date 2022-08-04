@@ -37,7 +37,6 @@ const BotSettingsView = function (props) {
   const [unitMaintenance, setUnitMaintenance] = useState(null);
   const [unitEnabled, setUnitEnabled] = useState(null);
   const [unitGuildId, setUnitGuildId] = useState(null);
-  const [unitExpRewardChannelId, setUnitExpRewardChannelId] = useState(null);
   const [unitJoinedRoleId, setUnitJoinedRoleId] = useState(null);
   const [unitRoleDiceChannelId, setUnitRoleDiceChannelId] = useState(null);
 
@@ -46,7 +45,6 @@ const BotSettingsView = function (props) {
     currentUnitMaintenance,
     currentUnitEnabled,
     currentUnitGuildId,
-    currentUnitExpRewardChannelId,
     currentUnitJoinedRoleId,
     currentUnitRoleDiceChannelId,
   }) => {
@@ -57,7 +55,6 @@ const BotSettingsView = function (props) {
     setUnitMaintenance(currentUnitMaintenance);
     setUnitEnabled(currentUnitEnabled);
     setUnitGuildId(currentUnitGuildId);
-    setUnitExpRewardChannelId(currentUnitExpRewardChannelId);
     setUnitJoinedRoleId(currentUnitJoinedRoleId);
     setUnitRoleDiceChannelId(currentUnitRoleDiceChannelId);
   }
@@ -68,7 +65,6 @@ const BotSettingsView = function (props) {
       unitMaintenance,
       unitEnabled,
       unitGuildId,
-      unitExpRewardChannelId,
       unitJoinedRoleId,
       unitRoleDiceChannelId,
     ));
@@ -79,7 +75,6 @@ const BotSettingsView = function (props) {
     setUnitMaintenance(null);
     setUnitEnabled(null);
     setUnitGuildId(null);
-    setUnitExpRewardChannelId(null);
     setUnitJoinedRoleId(null);
     setUnitRoleDiceChannelId(null);
   }
@@ -92,7 +87,6 @@ const BotSettingsView = function (props) {
     setUnitMaintenance(null);
     setUnitEnabled(null);
     setUnitGuildId(null);
-    setUnitExpRewardChannelId(null);
     setUnitJoinedRoleId(null);
     setUnitRoleDiceChannelId(null);
   }
@@ -123,7 +117,6 @@ const BotSettingsView = function (props) {
               <TableCell align="right">maintenance</TableCell>
               <TableCell align="right">enabed</TableCell>
               <TableCell align="right">discord guild id</TableCell>
-              <TableCell align="right">exp Reward channel id</TableCell>
               <TableCell align="right">joined Role id</TableCell>
               <TableCell align="right">role dice channel id</TableCell>
               <TableCell align="right">modify</TableCell>
@@ -202,19 +195,6 @@ const BotSettingsView = function (props) {
                     {
                       inEditMode.status && inEditMode.rowKey === setting.id ? (
                         <TextField
-                          value={unitExpRewardChannelId}
-                          onChange={(event) => setUnitExpRewardChannelId(event.target.value)}
-                        />
-
-                      ) : (
-                        setting.expRewardChannelId
-                      )
-                    }
-                  </TableCell>
-                  <TableCell align="right">
-                    {
-                      inEditMode.status && inEditMode.rowKey === setting.id ? (
-                        <TextField
                           value={unitJoinedRoleId}
                           onChange={(event) => setUnitJoinedRoleId(event.target.value)}
                         />
@@ -252,7 +232,6 @@ const BotSettingsView = function (props) {
                               maintenance: unitMaintenance,
                               enabled: unitEnabled,
                               guildId: unitGuildId,
-                              expRewardChannelId: unitExpRewardChannelId,
                               joinedRoleId: unitJoinedRoleId,
                               roleDiceChannelId: unitRoleDiceChannelId,
                             })}
@@ -280,7 +259,6 @@ const BotSettingsView = function (props) {
                             currentUnitMaintenance: setting.maintenance,
                             currentUnitEnabled: setting.enabled,
                             currentUnitGuildId: setting.discordHomeServerGuildId,
-                            currentUnitExpRewardChannelId: setting.expRewardChannelId,
                             currentUnitJoinedRoleId: setting.joinedRoleId,
                             currentUnitRoleDiceChannelId: setting.roleDiceChannelId,
                           })}

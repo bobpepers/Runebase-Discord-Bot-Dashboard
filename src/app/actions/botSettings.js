@@ -36,7 +36,6 @@ export function updateBotSettings(
   maintenance,
   enabled,
   guildId,
-  expRewardChannelId,
   joinedRoleId,
   roleDiceChannelId,
 ) {
@@ -46,7 +45,6 @@ export function updateBotSettings(
       maintenance,
       enabled,
       guildId,
-      expRewardChannelId,
       joinedRoleId,
       roleDiceChannelId,
     }).then((response) => {
