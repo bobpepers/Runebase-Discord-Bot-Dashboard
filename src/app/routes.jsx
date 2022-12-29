@@ -54,6 +54,7 @@ import Errors from './views/functions/Errors';
 import Login from './views/login/Login';
 import LoginTFA from './views/login/Login2FA';
 import LogoutView from './views/Logout';
+import RemindersManagement from './views/management/Reminders';
 
 import { authenticated } from './actions/auth';
 
@@ -132,6 +133,10 @@ const RoutesX = function (props) {
         <Route
           path="/management/channels"
           element={<Channels />}
+        />
+        <Route
+          path="/management/reminders"
+          element={<RemindersManagement />}
         />
         <Route
           path="/management/withdrawaladdresses"

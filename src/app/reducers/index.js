@@ -45,6 +45,7 @@ import itemModifierItemType from './itemModifierItemType';
 import itemBase from './itemBase';
 import itemDifficulty from './itemDifficulty';
 import skilltrees from './skilltrees';
+import reminders from './reminders';
 
 const store = configureStore({
   reducer: {
@@ -54,6 +55,8 @@ const store = configureStore({
     tfa,
     theme,
     alert,
+
+    reminders,
 
     nodeStatus,
     user,

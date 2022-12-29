@@ -1,10 +1,10 @@
 import {
-  FETCH_FEATURES_BEGIN,
-  FETCH_FEATURES_SUCCESS,
-  FETCH_FEATUERS_FAIL,
-  UPDATE_FEATURE,
-  ADD_FEATURE,
-  REMOVE_FEATURE,
+  FETCH_REMINDERS_BEGIN,
+  FETCH_REMINDERS_SUCCESS,
+  FETCH_REMINDERS_FAIL,
+  UPDATE_REMINDER,
+  REMOVE_REMINDER,
+  ADD_REMINDER,
 } from '../actions/types/index';
 
 const initialState = {
@@ -14,7 +14,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ADD_FEATURE:
+    case ADD_REMINDER:
       return {
         ...state,
         data: [
@@ -25,13 +25,13 @@ export default (state = initialState, action) => {
         ],
         isFetching: false,
       };
-    case REMOVE_FEATURE:
+    case REMOVE_REMINDER:
       return {
         ...state,
         data: state.data.filter((item) => item.id !== action.payload.id),
         isFetching: false,
       };
-    case UPDATE_FEATURE:
+    case UPDATE_REMINDER:
       return {
         ...state,
         data: state.data.map(
@@ -42,19 +42,19 @@ export default (state = initialState, action) => {
         isFetching: false,
         error: null,
       };
-    case FETCH_FEATURES_BEGIN:
+    case FETCH_REMINDERS_BEGIN:
       return {
         ...state,
         isFetching: true,
         error: null,
       };
-    case FETCH_FEATURES_SUCCESS:
+    case FETCH_REMINDERS_SUCCESS:
       return {
         ...state,
         data: action.payload,
         isFetching: false,
       };
-    case FETCH_FEATUERS_FAIL:
+    case FETCH_REMINDERS_FAIL:
       console.log('Error: ', action.error);
       return {
         ...state,

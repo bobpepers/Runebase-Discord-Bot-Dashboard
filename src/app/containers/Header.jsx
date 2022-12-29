@@ -168,6 +168,14 @@ const Header = function (props) {
               </Link>
               <Link
                 className="nav-link"
+                to="/management/reminders"
+              >
+                <MenuItem onClick={handleCloseManagement}>
+                  Reminders
+                </MenuItem>
+              </Link>
+              <Link
+                className="nav-link"
                 to="/management/servers"
               >
                 <MenuItem onClick={handleCloseManagement}>
