@@ -87,12 +87,16 @@ export function updateServerAction(
   id,
   inviteLink,
   expRewardChannelId,
+  inactiveChatterRoleId,
+  activeChatterRoleId,
 ) {
   return function (dispatch) {
     axios.post(`${window.myConfig.apiUrl}/management/server/update`, {
       id,
       inviteLink,
       expRewardChannelId,
+      inactiveChatterRoleId,
+      activeChatterRoleId,
     })
       .then((response) => {
         dispatch({

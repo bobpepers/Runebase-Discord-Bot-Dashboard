@@ -42,6 +42,12 @@ const headCells = [
     id: 'expRewardChannelId', numeric: true, disablePadding: false, label: 'expRewardChannelId',
   },
   {
+    id: 'inActiveChatterRoleId', numeric: true, disablePadding: false, label: 'inActiveChatterRoleId',
+  },
+  {
+    id: 'activeChatterRoleId', numeric: true, disablePadding: false, label: 'activeChatterRoleId',
+  },
+  {
     id: 'lastActive', numeric: true, disablePadding: false, label: 'last active',
   },
 ];
@@ -55,6 +61,8 @@ function createData(
   activeRealm,
   lastActive,
   banned,
+  inActiveChatterRoleId,
+  activeChatterRoleId,
 ) {
   return {
     id,
@@ -65,6 +73,8 @@ function createData(
     activeRealm,
     lastActive,
     banned,
+    inActiveChatterRoleId,
+    activeChatterRoleId,
   };
 }
 
@@ -194,6 +204,8 @@ function ServerTable(props) {
         item.activeRealm,
         item.lastActive,
         item.banned,
+        item.inActiveChatterRoleId,
+        item.activeChatterRoleId,
       ),
     );
   });
@@ -211,17 +223,24 @@ function ServerTable(props) {
   const [unitInviteLink, setUnitInviteLink] = useState(null);
   const [unitExpRewardChannelId, setUnitExpRewardChannelId] = useState(null);
 
+  const [unitInactiveChatterRoleId, setUnitInactiveChatterRoleId] = useState(null);
+  const [unitActiveChatterRoleId, setUnitActiveChatterRoleId] = useState(null);
+
   const onEdit = ({
     id,
     currentUnitInviteLink,
-    cuurentUnitExpRewardChannelId,
+    currentUnitExpRewardChannelId,
+    currentUnitInactiveChatterRoleId,
+    currentUnitActiveChatterRoleId,
   }) => {
     setInEditMode({
       status: true,
       rowKey: id,
     })
     setUnitInviteLink(currentUnitInviteLink);
-    setUnitExpRewardChannelId(cuurentUnitExpRewardChannelId);
+    setUnitExpRewardChannelId(currentUnitExpRewardChannelId);
+    setUnitInactiveChatterRoleId(currentUnitInactiveChatterRoleId);
+    setUnitActiveChatterRoleId(currentUnitActiveChatterRoleId);
   }
 
   const onSave = async ({ id }) => {
@@ -229,6 +248,8 @@ function ServerTable(props) {
       id,
       unitInviteLink,
       unitExpRewardChannelId,
+      unitInactiveChatterRoleId,
+      unitActiveChatterRoleId,
     ));
     setInEditMode({
       status: false,
@@ -236,6 +257,8 @@ function ServerTable(props) {
     })
     setUnitInviteLink(null);
     setUnitExpRewardChannelId(null);
+    setUnitInactiveChatterRoleId(null);
+    setUnitActiveChatterRoleId(null);
   }
 
   const onCancel = () => {
@@ -245,6 +268,8 @@ function ServerTable(props) {
     })
     setUnitInviteLink(null);
     setUnitExpRewardChannelId(null);
+    setUnitInactiveChatterRoleId(null);
+    setUnitActiveChatterRoleId(null);
   }
 
   const handleRequestSort = (event, property) => {
@@ -366,6 +391,34 @@ function ServerTable(props) {
                     </TableCell>
 
                     <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.id ? (
+                          <TextField
+                            value={unitInactiveChatterRoleId}
+                            onChange={(event) => setUnitInactiveChatterRoleId(event.target.value)}
+                          />
+
+                        ) : (
+                          row.inActiveChatterRoleId
+                        )
+                      }
+                    </TableCell>
+
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.id ? (
+                          <TextField
+                            value={unitActiveChatterRoleId}
+                            onChange={(event) => setUnitActiveChatterRoleId(event.target.value)}
+                          />
+
+                        ) : (
+                          row.activeChatterRoleId
+                        )
+                      }
+                    </TableCell>
+
+                    <TableCell align="right">
                       {row.lastActive}
                     </TableCell>
                     <TableCell align="right">
@@ -405,6 +458,8 @@ function ServerTable(props) {
                                 id: row.id,
                                 currentUnitInviteLink: row.inviteLink,
                                 currentUnitExpRewardChannelId: row.expRewardChannelId,
+                                currentUnitInactiveChatterRoleId: row.inActiveChatterRoleId,
+                                currentUnitActiveChatterRoleId: row.activeChatterRoleId,
                               })}
                             >
                               Edit
