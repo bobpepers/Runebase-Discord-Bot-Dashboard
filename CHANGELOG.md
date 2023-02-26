@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.3...v0.0.4) (2023-02-26)
+
+
+### Features
+
+* ✨ active/inactive chatter roleId for discord server records ([748e828](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/748e8284a433e5a186e5780904f4a3b6d2c17bd0))
+
 ### [0.0.3](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.2...v0.0.3) (2022-12-29)
 
 
