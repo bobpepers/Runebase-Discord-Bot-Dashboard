@@ -24,9 +24,9 @@ import {
 } from '@mui/material';
 
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
+} from 'react-final-form';
 
 import {
   fetchItemModifiersAction,
@@ -38,27 +38,8 @@ import {
 import {
   fetchItemQualityAction,
 } from '../../actions/itemQuality';
-
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
+import SelectField from '../../components/form/SelectFields';
+import RenderTextField from '../../components/form/TextField';
 
 const renderSelectField = ({
   input,
@@ -84,7 +65,6 @@ const renderSelectField = ({
 const ItemsModifiersView = function (props) {
   const {
     auth,
-    handleSubmit,
     itemQuality,
     itemModifier,
   } = props;
@@ -244,176 +224,212 @@ const ItemsModifiersView = function (props) {
     itemModifier,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addItemModifierAction(obj));
-  }
-
   const changeItemQuality = (val, preVal) => {
     setItemQualityId(preVal);
   }
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={4}>
-            <Field
-              name="itemQuality"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeItemQuality(val, prevVal)}
-              label="itemQuality"
-            >
-              {itemQuality && itemQuality.data && itemQuality.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.name}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="levelReq"
-              component={renderField}
-              type="text"
-              placeholder="levelReq"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="levelMonster"
-              component={renderField}
-              type="text"
-              placeholder="levelMonster"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Field
-              name="prefix"
-              component={renderField}
-              type="text"
-              placeholder="prefix"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Field
-              name="suffix"
-              component={renderField}
-              type="text"
-              placeholder="suffix"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="minStrength"
-              component={renderField}
-              type="text"
-              placeholder="minStrength"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="maxStrength"
-              component={renderField}
-              type="text"
-              placeholder="maxStrength"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="minDexterity"
-              component={renderField}
-              type="text"
-              placeholder="minDexterity"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="maxDexterity"
-              component={renderField}
-              type="text"
-              placeholder="maxDexterity"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="minVitality"
-              component={renderField}
-              type="text"
-              placeholder="minVitality"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="maxVitality"
-              component={renderField}
-              type="text"
-              placeholder="maxVitality"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="minEnergy"
-              component={renderField}
-              type="text"
-              placeholder="minEnergy"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="maxEnergy"
-              component={renderField}
-              type="text"
-              placeholder="maxEnergy"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="minEdefense"
-              component={renderField}
-              type="text"
-              placeholder="minEdefense"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="maxEdefense"
-              component={renderField}
-              type="text"
-              placeholder="maxEdefense"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="minEdamage"
-              component={renderField}
-              type="text"
-              placeholder="minEdamage"
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <Field
-              name="maxEdamage"
-              component={renderField}
-              type="text"
-              placeholder="maxEdamage"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-              style={{ marginRight: '5px' }}
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
-
-      </form>
+      <Form
+        onSubmit={async (values) => {
+          await dispatch(addItemModifierAction(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.itemQuality) {
+            errors.itemQuality = 'itemQuality is required'
+          }
+          return errors;
+        }}
+      >
+        {({
+          form,
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={4}>
+                <Field
+                  name="itemQuality"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeItemQuality(null, value)
+                    return value;
+                  }}
+                  label="itemQuality"
+                >
+                  {itemQuality && itemQuality.data && itemQuality.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="levelReq"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="levelReq"
+                  label="levelReq"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="levelMonster"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="levelMonster"
+                  label="levelMonster"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  name="prefix"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="prefix"
+                  label="prefix"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  name="suffix"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="suffix"
+                  label="suffix"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="minStrength"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="minStrength"
+                  label="minStrength"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="maxStrength"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="maxStrength"
+                  label="maxStrength"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="minDexterity"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="minDexterity"
+                  label="minDexterity"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="maxDexterity"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="maxDexterity"
+                  label="maxDexterity"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="minVitality"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="minVitality"
+                  label="minVitality"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="maxVitality"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="maxVitality"
+                  label="maxVitality"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="minEnergy"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="minEnergy"
+                  label="minEnergy"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="maxEnergy"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="maxEnergy"
+                  label="maxEnergy"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="minEdefense"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="minEdefense"
+                  label="minEdefense"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="maxEdefense"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="maxEdefense"
+                  label="maxEdefense"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="minEdamage"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="minEdamage"
+                  label="minEdamage"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <Field
+                  name="maxEdamage"
+                  component={RenderTextField}
+                  type="text"
+                  placeholder="maxEdamage"
+                  label="maxEdamage"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
       <TableContainer>
         <Table
           size="small"
@@ -802,14 +818,4 @@ function mapStateToProps(state) {
   };
 }
 
-const validate = (formProps) => {
-  const errors = {};
-  if (!formProps.itemQuality) {
-    errors.itemQuality = 'itemQuality is required'
-  }
-  return errors;
-}
-
-// const selector = formValueSelector('profile');
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'itemModifier', validate })(ItemsModifiersView));
+export default connect(mapStateToProps, null)(ItemsModifiersView);

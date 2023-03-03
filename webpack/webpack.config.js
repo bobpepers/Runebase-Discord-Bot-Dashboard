@@ -5,6 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackObfuscator = require('webpack-obfuscator');
 const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = (options) => {
   const webpackConfig = {
@@ -31,9 +32,24 @@ module.exports = (options) => {
             implementation: ImageMinimizerPlugin.imageminMinify,
             options: {
               plugins: [
-                ['gifsicle', { interlaced: true }],
-                ['jpegtran', { progressive: true }],
-                ['optipng', { optimizationLevel: 5 }],
+                [
+                  'gifsicle',
+                  {
+                    interlaced: true,
+                  },
+                ],
+                [
+                  'jpegtran',
+                  {
+                    progressive: true,
+                  },
+                ],
+                [
+                  'optipng',
+                  {
+                    optimizationLevel: 5,
+                  },
+                ],
               ],
             },
           },
@@ -64,26 +80,60 @@ module.exports = (options) => {
       },
     },
     resolve: {
-      extensions: ['.js', '.jsx'],
+      extensions: [
+        '.js',
+        '.jsx',
+      ],
       alias: {
-        // path: require.resolve('path-browserify'),
-        crypto: require.resolve('crypto-browserify'),
-        stream: require.resolve('stream-browserify'),
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        os: require.resolve('os-browserify/browser'),
         url: require.resolve('url/'),
-        buffer: require.resolve('buffer/'),
-        fs: false,
-        module: false,
-        typescript: false,
+        stream: require.resolve('stream-browserify'),
+        crypto: require.resolve('crypto-browserify'),
       },
     },
+    plugins: [
+      !options.isProduction && new ReactRefreshWebpackPlugin(),
+      new Webpack.ProvidePlugin({
+        process: 'process/browser',
+      }),
+      new Webpack.ProvidePlugin({
+        Buffer: [
+          'buffer',
+          'Buffer',
+        ],
+      }),
+      new HtmlWebpackPlugin({
+        template: Path.join(__dirname, '../src/index.html'),
+        NODE_ENV: options.isProduction ? 'production' : 'development',
+        minify: {
+          removeComments: false,
+        },
+      }),
+    ].filter(Boolean),
     module: {
       rules: [
         {
+          test: /\.[jt]sx?$/,
+          exclude: /node_modules/,
+          use: [
+            {
+              loader: require.resolve('babel-loader'),
+              options: {
+                envName: !options.isProduction ? 'development' : 'production',
+                plugins: [
+                  !options.isProduction && require.resolve('react-refresh/babel'),
+                ].filter(Boolean),
+              },
+            },
+          ],
+        },
+        {
           test: /\.(gif|png|jpe?g)$/i,
-          type: 'asset',
+          type: 'asset/resource',
+          ...(options.isProduction && {
+            generator: {
+              filename: 'static/images/[hash][ext][query]',
+            },
+          }),
         },
         {
           test: /\.svg$/,
@@ -92,18 +142,16 @@ module.exports = (options) => {
               loader: '@svgr/webpack',
               options: {
                 prettier: false,
-                svgo: false,
+                svgo: true,
                 svgoConfig: {
-                  plugins: [{ removeViewBox: false }],
+                  plugins: [
+                    {
+                      name: 'removeViewBox',
+                      active: false,
+                    },
+                  ],
                 },
                 titleProp: true,
-                ref: true,
-              },
-            },
-            {
-              loader: 'file-loader',
-              options: {
-                name: 'static/images/[name].[hash].[ext]',
               },
             },
           ],
@@ -113,18 +161,24 @@ module.exports = (options) => {
         },
         {
           test: /\.(eot|woff|woff2|ttf)(\?\S*)?$/,
-          use: [{
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'Fonts/',
-              publicPath: '../Fonts/',
+          type: 'asset/resource',
+          ...(options.isProduction && {
+            generator: {
+              filename: 'static/fonts/[hash][ext][query]',
             },
-          }],
+          }),
         },
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          use: [
+            {
+              loader: 'style-loader',
+              options: {
+                injectType: 'singletonStyleTag',
+              },
+            },
+            'css-loader',
+          ],
         },
         {
           test: /\.m?js$/,
@@ -138,7 +192,11 @@ module.exports = (options) => {
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-react', '@babel/preset-env'],
+              envName: !options.isProduction ? 'development' : 'production',
+              presets: [
+                '@babel/preset-react',
+                '@babel/preset-env',
+              ],
               plugins: [
                 '@babel/plugin-transform-runtime',
               ],
@@ -146,83 +204,61 @@ module.exports = (options) => {
           },
         }],
     },
-
-    plugins: [
-      new Webpack.ProvidePlugin({
-        process: 'process/browser',
-      }),
-      new Webpack.ProvidePlugin({
-        Buffer: ['buffer', 'Buffer'],
-      }),
-      new HtmlWebpackPlugin({
-        template: Path.join(__dirname, '../src/index.html'),
-        NODE_ENV: options.isProduction ? 'production' : 'development',
-        minify: {
-          removeComments: false,
-        },
-      }),
-    ],
   };
+
+  webpackConfig.module.rules.push({
+    rules: [
+      {
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'style-loader',
+            options: {
+              injectType: 'singletonStyleTag',
+            },
+          },
+          'css-loader',
+          'sass-loader',
+        ],
+      },
+    ],
+  });
 
   if (options.isProduction) {
     webpackConfig.entry = [Path.join(__dirname, '../src/app/index')];
 
-    // webpackConfig.plugins.push(
-    //  new Webpack.optimize.OccurrenceOrderPlugin(),
-    // );
-
-    // webpackConfig.plugins.push(
-    //   new CopyPlugin({
-    //     patterns: [
-    //       {
-    //         from: Path.join(__dirname, '../static'),
-    //         to: Path.join(__dirname, '../dist/static'),
-    //         // context: 'app/',
-    //       },
-    //     ],
-    //   }),
-    // );
-
-    webpackConfig.module.rules.push({
-      test: /\.scss$/,
-      use: [
-        'style-loader', // or MiniCssExtractPlugin.loader
-        { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-        { loader: 'sass-loader', options: { sourceMap: true } },
-      ],
-    });
+    webpackConfig.plugins.push(
+      new CopyPlugin({
+        patterns: [
+          {
+            from: Path.join(__dirname, '../static'),
+            to: Path.join(__dirname, '../dist/static'),
+          },
+        ],
+      }),
+    );
 
     webpackConfig.plugins.push(
       new WebpackObfuscator({
         rotateStringArray: true,
-      }, ['excluded_bundle_name.js']),
+      }, [
+        'excluded_bundle_name.js',
+      ]),
     );
   } else {
     webpackConfig.plugins.push(
       new Webpack.HotModuleReplacementPlugin(),
     );
 
-    webpackConfig.module.rules.push({
-      rules: [
-        {
-          test: /\.scss$/,
-          use: ['style-loader', 'css-loader', 'sass-loader'],
-        },
-      ],
-    });
-
     webpackConfig.devServer = {
-      // contentBase: Path.join(__dirname, '../'),
-      // disableHostCheck: true,
-      hot: true,
+      hot: !!options.isProduction,
       port: options.port,
-      // inline: true,
-      // progress: true,
       historyApiFallback: true,
-      // stats: 'errors-warnings',
-      // host: 'localhost',
       host: 'localhost',
-      // public: 'localhost',
+      client: {
+        overlay: false,
+        logging: 'warn', // Want to set this to 'warn' or 'error'
+      },
     };
   }
 

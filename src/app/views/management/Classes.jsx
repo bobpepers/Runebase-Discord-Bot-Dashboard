@@ -15,18 +15,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  FormControl,
-  Select,
-  InputLabel,
-  FormHelperText,
   MenuItem,
 } from '@mui/material';
-
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
+} from 'react-final-form';
 
 import {
   fetchClassesAction,
@@ -38,54 +32,14 @@ import {
   fetchClassDescriptionsAction,
 } from '../../actions/classDescriptions';
 
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
-
-const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, error },
-  children,
-  ...custom
-}) => (
-  <FormControl className="admin-form-field" style={{ width: '100%' }}>
-    <InputLabel error={touched && error}>{label}</InputLabel>
-    <Select
-      style={{ width: '100%' }}
-      floatingLabelText={label}
-      error={touched && error}
-      {...input}
-      children={children}
-      {...custom}
-    />
-    <FormHelperText error={touched && error}>{error}</FormHelperText>
-  </FormControl>
-)
+import SelectField from '../../components/form/SelectFields';
+import TextField from '../../components/form/TextField';
 
 const ClassesView = function (props) {
   const {
     auth,
     classes,
     classDescriptions,
-    handleSubmit,
   } = props;
   const dispatch = useDispatch();
   const [inEditMode, setInEditMode] = useState({
@@ -105,8 +59,8 @@ const ClassesView = function (props) {
   const [unitDescription, setUnitDescription] = useState(null);
   const [descriptionId, setDescriptionId] = useState('All');
 
-  const changeDescription = (val, preVal) => {
-    setDescriptionId(preVal);
+  const changeDescription = (val) => {
+    setDescriptionId(val);
   }
 
   const onEdit = ({
@@ -208,124 +162,186 @@ const ClassesView = function (props) {
     classDescriptions,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addClassAction(obj));
-  }
-
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={4}>
-            <Field
-              name="name"
-              component={renderField}
-              type="text"
-              placeholder="name"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="strength"
-              component={renderField}
-              type="text"
-              placeholder="strength"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="dexterity"
-              component={renderField}
-              type="text"
-              placeholder="dexterity"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="vitality"
-              component={renderField}
-              type="text"
-              placeholder="vitality"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="energy"
-              component={renderField}
-              type="text"
-              placeholder="energy"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="life"
-              component={renderField}
-              type="text"
-              placeholder="life"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="mana"
-              component={renderField}
-              type="text"
-              placeholder="mana"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="stamina"
-              component={renderField}
-              type="text"
-              placeholder="stamina"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="attackRating"
-              component={renderField}
-              type="text"
-              placeholder="attackRating"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="defense"
-              component={renderField}
-              type="text"
-              placeholder="defense"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="description"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeDescription(val, prevVal)}
-              label="description"
-            >
-              {classDescriptions && classDescriptions.data && classDescriptions.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.name}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-              style={{ marginRight: '5px' }}
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
 
-      </form>
+      <Form
+        onSubmit={async (values) => {
+          await dispatch(addClassAction(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.name) {
+            errors.name = 'Name is required'
+          }
+          if (!values.strength) {
+            errors.strength = 'strength is required'
+          }
+          if (!values.dexterity) {
+            errors.dexterity = 'dexterity is required'
+          }
+          if (!values.vitality) {
+            errors.vitality = 'vitality is required'
+          }
+          if (!values.energy) {
+            errors.energy = 'energy is required'
+          }
+          if (!values.life) {
+            errors.life = 'life is required'
+          }
+          if (!values.mana) {
+            errors.mana = 'mana is required'
+          }
+          if (!values.stamina) {
+            errors.stamina = 'stamina is required'
+          }
+          if (!values.attackRating) {
+            errors.attackRating = 'attackRating is required'
+          }
+          if (!values.defense) {
+            errors.defense = 'defense is required'
+          }
+          if (!values.description) {
+            errors.description = 'description is required'
+          }
+
+          return errors;
+        }}
+      >
+        {({
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={4}>
+                <Field
+                  name="name"
+                  component={TextField}
+                  type="text"
+                  placeholder="name"
+                  label="name"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="strength"
+                  component={TextField}
+                  type="text"
+                  placeholder="strength"
+                  label="strength"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="dexterity"
+                  component={TextField}
+                  type="text"
+                  placeholder="dexterity"
+                  label="dexterity"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="vitality"
+                  component={TextField}
+                  type="text"
+                  placeholder="vitality"
+                  label="vitality"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="energy"
+                  component={TextField}
+                  type="text"
+                  placeholder="energy"
+                  label="energy"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="life"
+                  component={TextField}
+                  type="text"
+                  placeholder="life"
+                  label="life"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="mana"
+                  component={TextField}
+                  type="text"
+                  placeholder="mana"
+                  label="mana"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="stamina"
+                  component={TextField}
+                  type="text"
+                  placeholder="stamina"
+                  label="stamina"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="attackRating"
+                  component={TextField}
+                  type="text"
+                  placeholder="attackRating"
+                  label="attackRating"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="defense"
+                  component={TextField}
+                  type="text"
+                  placeholder="defense"
+                  label="defense"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="description"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeDescription(value)
+                    return value;
+                  }}
+                  label="description"
+                >
+                  {classDescriptions && classDescriptions.data && classDescriptions.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
+
       <TableContainer>
         <Table
           size="small"
@@ -608,45 +624,4 @@ function mapStateToProps(state) {
   };
 }
 
-const validate = (formProps) => {
-  const errors = {};
-  if (!formProps.name) {
-    errors.name = 'Name is required'
-  }
-  if (!formProps.strength) {
-    errors.strength = 'strength is required'
-  }
-  if (!formProps.dexterity) {
-    errors.dexterity = 'dexterity is required'
-  }
-  if (!formProps.vitality) {
-    errors.vitality = 'vitality is required'
-  }
-  if (!formProps.energy) {
-    errors.energy = 'energy is required'
-  }
-  if (!formProps.life) {
-    errors.life = 'life is required'
-  }
-  if (!formProps.mana) {
-    errors.mana = 'mana is required'
-  }
-  if (!formProps.stamina) {
-    errors.stamina = 'stamina is required'
-  }
-  if (!formProps.attackRating) {
-    errors.attackRating = 'attackRating is required'
-  }
-  if (!formProps.defense) {
-    errors.defense = 'defense is required'
-  }
-  if (!formProps.description) {
-    errors.description = 'description is required'
-  }
-
-  return errors;
-}
-
-// const selector = formValueSelector('profile');
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'classes', validate })(ClassesView));
+export default connect(mapStateToProps, null)(ClassesView);

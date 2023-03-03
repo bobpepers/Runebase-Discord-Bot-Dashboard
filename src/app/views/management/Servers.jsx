@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
@@ -12,7 +13,6 @@ import {
   TextField,
   MenuItem,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { withRouter } from '../../hooks/withRouter';
 
 import {
@@ -22,15 +22,27 @@ import {
 } from '../../actions/servers';
 import ServerTable from '../../components/management/ServerTable';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
+const PREFIX = 'Servers';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+  selectEmpty: `${PREFIX}-selectEmpty`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(1),
     minWidth: 120,
     width: '100%',
   },
-  selectEmpty: {
+
+  [`& .${classes.selectEmpty}`]: {
     marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 function ServersView(props) {
@@ -39,7 +51,7 @@ function ServersView(props) {
     servers,
   } = props;
   const dispatch = useDispatch();
-  const classes = useStyles();
+
   const [id, setId] = useState('');
   const [groupId, setGroupId] = useState('');
   const [serverName, setServerName] = useState('');
@@ -95,7 +107,7 @@ function ServersView(props) {
   };
 
   return (
-    <div className="height100 content">
+    <Root className="height100 content">
       <Grid container>
         <Grid item xs={12}>
           <h3>Servers</h3>
@@ -183,8 +195,8 @@ function ServersView(props) {
 
         </Grid>
       </Grid>
-    </div>
-  )
+    </Root>
+  );
 }
 
 const mapStateToProps = (state) => ({

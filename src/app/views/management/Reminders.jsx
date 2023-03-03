@@ -15,18 +15,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  FormHelperText,
 } from '@mui/material';
 
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
+} from 'react-final-form';
 
 import {
   fetchReminders,
@@ -36,71 +32,8 @@ import {
 } from '../../actions/reminders';
 import { fetchServerAction } from '../../actions/servers';
 import { fetchChannelsAction } from '../../actions/channels';
-
-const renderTextField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        multiline
-        rows={6}
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
-
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
-
-const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, error },
-  children,
-  ...custom
-}) => (
-  <FormControl className="admin-form-field" style={{ width: '100%' }}>
-    <InputLabel error={touched && error}>{label}</InputLabel>
-    <Select
-      style={{ width: '100%' }}
-      floatingLabelText={label}
-      error={touched && error}
-      {...input}
-      children={children}
-      {...custom}
-    />
-    <FormHelperText error={touched && error}>{error}</FormHelperText>
-  </FormControl>
-)
+import SelectField from '../../components/form/SelectFields';
+import TextField from '../../components/form/TextField';
 
 const RemindersView = function (props) {
   const {
@@ -108,7 +41,6 @@ const RemindersView = function (props) {
     servers,
     channels,
     reminders,
-    handleSubmit,
   } = props;
   const dispatch = useDispatch();
   const [inEditMode, setInEditMode] = useState({
@@ -171,8 +103,8 @@ const RemindersView = function (props) {
     setUnitEmbed(null);
     setUnitEnabled(null);
   }
-  const changeServer = (val, preVal) => {
-    setServerId(preVal);
+  const changeServer = (val) => {
+    setServerId(val);
   }
 
   useEffect(() => {
@@ -210,87 +142,120 @@ const RemindersView = function (props) {
     serverId,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addReminder(obj));
-  }
+  // const handleFormSubmit = async (obj) => {
+  //   await dispatch(addReminder(obj));
+  // }
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={6}>
-            <Field
-              name="server"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeServer(val, prevVal)}
-              label="Server"
-            >
-              {servers && servers.data && servers.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.groupName}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={6}>
-            <Field
-              name="channel"
-              component={renderSelectField}
-              // onChange={changeServer}
-              label="Channel"
-            >
-              {channels && channels.data && channels.data.map((channel) => (
-                <MenuItem key={channel.id} value={channel.id}>
-                  {channel.channelName}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={6}>
-            <Field
-              name="cron"
-              component={renderField}
-              type="text"
-              placeholder="cron"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Field
-              name="embed"
-              component={renderSelectField}
-              label="embed"
-            >
-              <MenuItem key="1" value="true">
-                True
-              </MenuItem>
-              <MenuItem key="2" value="false">
-                False
-              </MenuItem>
-            </Field>
-          </Grid>
-          <Grid item xs={12}>
-            <Field
-              name="message"
-              component={renderTextField}
-              type="text"
-              placeholder="message"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
+      <Form
+        onSubmit={async (values) => {
+          await dispatch(addReminder(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.channel) {
+            errors.channel = 'Server is required'
+          }
+          if (!values.message) {
+            errors.message = 'Message is required'
+          }
+          if (!values.cron) {
+            errors.cron = 'Cron is required'
+          }
+          if (!values.embed) {
+            errors.embed = 'Embed is required'
+          }
+          return errors;
+        }}
+      >
+        {({
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={6}>
+                <Field
+                  name="server"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeServer(value)
+                    return value;
+                  }}
+                  label="Server"
+                >
+                  {servers && servers.data && servers.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.groupName}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  name="channel"
+                  component={SelectField}
+                  label="Channel"
+                >
+                  {channels && channels.data && channels.data.map((channel) => (
+                    <MenuItem key={channel.id} value={channel.id}>
+                      {channel.channelName}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  name="cron"
+                  component={TextField}
+                  type="text"
+                  placeholder="cron"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  name="embed"
+                  component={SelectField}
+                  label="embed"
+                >
+                  <MenuItem key="1" value="true">
+                    True
+                  </MenuItem>
+                  <MenuItem key="2" value="false">
+                    False
+                  </MenuItem>
+                </Field>
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  name="message"
+                  component={TextField}
+                  type="text"
+                  placeholder="message"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
 
-      </form>
       <TableContainer>
         <Table
           size="small"
@@ -475,22 +440,4 @@ function mapStateToProps(state) {
   };
 }
 
-const validate = (formProps) => {
-  const errors = {};
-  if (!formProps.channel) {
-    errors.channel = 'Server is required'
-  }
-  if (!formProps.message) {
-    errors.message = 'Message is required'
-  }
-  if (!formProps.cron) {
-    errors.cron = 'Cron is required'
-  }
-  if (!formProps.embed) {
-    errors.embed = 'Embed is required'
-  }
-
-  return errors;
-}
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'reminders', validate })(RemindersView));
+export default connect(mapStateToProps, null)(RemindersView);

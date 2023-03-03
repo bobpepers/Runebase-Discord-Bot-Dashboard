@@ -2,8 +2,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
 import { connect, useDispatch } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import {
@@ -18,23 +18,32 @@ import {
   fetchErrorsAction,
 } from '../../actions/errors';
 
-const styles = {
-  card: {
+const PREFIX = 'Errors';
+
+const classes = {
+  card: `${PREFIX}-card`,
+  bullet: `${PREFIX}-bullet`,
+  title: `${PREFIX}-title`,
+  pos: `${PREFIX}-pos`
+};
+
+const Root = styled('div')({
+  [`& .${classes.card}`]: {
     minWidth: 275,
     margin: '50px',
   },
-  bullet: {
+  [`& .${classes.bullet}`]: {
     display: 'inline-block',
     margin: '0 2px',
     transform: 'scale(0.8)',
   },
-  title: {
+  [`& .${classes.title}`]: {
     fontSize: 14,
   },
-  pos: {
+  [`& .${classes.pos}`]: {
     marginBottom: 12,
   },
-};
+});
 
 const renderItems = (data) => {
   const parent = [];
@@ -121,7 +130,7 @@ const Errors = function (props) {
   };
 
   return (
-    <div className="height100 content">
+    <Root className="height100 content">
       <Grid
         container
         spacing={0}
@@ -183,7 +192,7 @@ const Errors = function (props) {
           </Grid>
         </Grid>
       </Grid>
-    </div>
+    </Root>
   );
 }
 
@@ -196,4 +205,4 @@ const mapStateToProps = (state) => ({
   errors: state.errors,
 })
 
-export default withStyles(styles)(withRouter(connect(mapStateToProps, null)(Errors)));
+export default (withRouter(connect(mapStateToProps, null)(Errors)));

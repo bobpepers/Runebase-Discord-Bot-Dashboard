@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { styled } from '@mui/material/styles';
 // import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@mui/styles';
 import {
   useDispatch,
 } from 'react-redux';
@@ -24,6 +24,40 @@ import BanDialog from './BanDialog';
 import {
   updateServerAction,
 } from '../../actions/servers';
+
+const PREFIX = 'ServerTable';
+
+const classes = {
+  root: `${PREFIX}-root`,
+  table: `${PREFIX}-table`,
+  visuallyHidden: `${PREFIX}-visuallyHidden`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`&.${classes.root}`]: {
+    width: '100%',
+  },
+
+  [`& .${classes.table}`]: {
+    minWidth: 750,
+  },
+
+  [`& .${classes.visuallyHidden}`]: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
+  }
+}));
 
 const headCells = [
   {
@@ -157,26 +191,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-  },
-  table: {
-    minWidth: 750,
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-  },
-}));
-
 function ServerTable(props) {
   const {
     servers,
@@ -210,7 +224,7 @@ function ServerTable(props) {
     );
   });
 
-  const classes = useStyles();
+
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('id');
   const [selected, setSelected] = useState([]);
@@ -323,7 +337,7 @@ function ServerTable(props) {
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   return (
-    <div className={classes.root}>
+    <Root className={classes.root}>
       <TableContainer>
         <Table
           className={classes.table}
@@ -520,7 +534,7 @@ function ServerTable(props) {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-    </div>
+    </Root>
   );
 }
 

@@ -1,16 +1,24 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import {
   connect,
 } from 'react-redux';
-import withStyles from '@mui/styles/withStyles';
 import {
   Switch,
 } from '@mui/material';
 import { Brightness3, WbSunny } from '@mui/icons-material';
 import { changeTheme } from '../actions';
 
-const ThemeSwitch = withStyles({
-  switchBase: {
+const PREFIX = 'ThemeToggle';
+
+const classes = {
+  switchBase: `${PREFIX}-switchBase`,
+  checked: `${PREFIX}-checked`,
+  track: `${PREFIX}-track`,
+};
+
+const Root = styled('div')({
+  [`& .${classes.switchBase}`]: {
     color: '#FE6B8B',
     '&$checked': {
       color: '#FE6B8B',
@@ -19,9 +27,11 @@ const ThemeSwitch = withStyles({
       backgroundColor: '#FE6B8B',
     },
   },
-  checked: {},
-  track: {},
-})(Switch);
+  [`& .${classes.checked}`]: {},
+  [`& .${classes.track}`]: {},
+});
+
+const ThemeSwitch = Switch;
 
 // tslint:disable:jsx-no-lambda
 function ThemeToggle(props) {
@@ -37,14 +47,19 @@ function ThemeToggle(props) {
   };
 
   return (
-    <div>
+    <Root>
       <WbSunny />
       <ThemeSwitch
         checked={theme !== 'light'}
         onChange={(e) => handleChangeCurrentStyleMode(theme === 'light' ? 'dark' : 'light')}
+        classes={{
+          switchBase: classes.switchBase,
+          checked: classes.checked,
+          track: classes.track,
+        }}
       />
       <Brightness3 />
-    </div>
+    </Root>
   );
 }
 

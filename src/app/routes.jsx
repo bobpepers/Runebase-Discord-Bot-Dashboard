@@ -14,22 +14,17 @@ import { connect, useDispatch } from 'react-redux';
 import toggleTheme from './helpers/toggleTheme';
 
 import Home from './views/Home';
-
 // import Activity from './views/Activity';
 import Settings from './views/Settings';
-
 import Register from './views/register/Register';
 import RegisterVerify from './views/register/RegisterVerify';
 import VerifyEmail from './views/register/VerifyEmail';
 import RegisterVerified from './views/register/RegisterVerified';
-
 import ResetPassword from './views/resetPassword/ResetPassword';
 import ResetPasswordVerify from './views/resetPassword/ResetPasswordVerify';
 import ResetPasswordNew from './views/resetPassword/ResetPasswordNew';
-
 import Servers from './views/management/Servers';
 import UserView from './views/management/User';
-
 import Channels from './views/management/Channels';
 import Users from './views/management/Users';
 import BotSettings from './views/management/BotSettings';
@@ -45,12 +40,10 @@ import ItemsFamiliesView from './views/management/ItemFamily';
 import ItemsModifiersView from './views/management/ItemModifiers';
 import ItemsBaseView from './views/management/itemBase';
 import SkillTreesView from './views/management/SkillTrees';
-import LinkItemModifierToItemTypeView from './views/management/LinkItemModifierToItemType'
-
+import LinkItemModifierToItemTypeView from './views/management/LinkItemModifierToItemType';
 import Deposits from './views/functions/Deposits';
 import Withdrawals from './views/functions/Withdrawals';
 import Errors from './views/functions/Errors';
-
 import Login from './views/login/Login';
 import LoginTFA from './views/login/Login2FA';
 import LogoutView from './views/Logout';

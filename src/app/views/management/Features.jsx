@@ -16,17 +16,14 @@ import {
   TableHead,
   TableRow,
   TextField,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
-  FormHelperText,
 } from '@mui/material';
 
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
+} from 'react-final-form';
 
 import {
   fetchFeatures,
@@ -36,48 +33,8 @@ import {
 } from '../../actions/features';
 import { fetchServerAction } from '../../actions/servers';
 import { fetchChannelsAction } from '../../actions/channels';
-
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
-
-const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, error },
-  children,
-  ...custom
-}) => (
-  <FormControl className="admin-form-field" style={{ width: '100%' }}>
-    <InputLabel error={touched && error}>{label}</InputLabel>
-    <Select
-      style={{ width: '100%' }}
-      floatingLabelText={label}
-      error={touched && error}
-      {...input}
-      children={children}
-      {...custom}
-    />
-    <FormHelperText error={touched && error}>{error}</FormHelperText>
-  </FormControl>
-)
+import SelectField from '../../components/form/SelectFields';
+import RenderTextField from '../../components/form/TextField';
 
 const FeaturesView = function (props) {
   const {
@@ -85,7 +42,6 @@ const FeaturesView = function (props) {
     features,
     servers,
     channels,
-    handleSubmit,
   } = props;
   const dispatch = useDispatch();
   const [inEditMode, setInEditMode] = useState({
@@ -188,135 +144,162 @@ const FeaturesView = function (props) {
     serverId,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addFeature(obj));
-  }
-
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={4}>
-            <Field
-              name="feature"
-              component={renderSelectField}
-              label="Feature"
-            >
-              <MenuItem key="1" value="tip">
-                tip
-              </MenuItem>
-              <MenuItem key="2" value="rain">
-                rain
-              </MenuItem>
-              <MenuItem key="3" value="reactdrop">
-                reactdrop
-              </MenuItem>
-              <MenuItem key="4" value="faucet">
-                faucet
-              </MenuItem>
-              <MenuItem key="5" value="hurricane">
-                hurricane
-              </MenuItem>
-              <MenuItem key="6" value="thunderstorm">
-                thunderstorm
-              </MenuItem>
-              <MenuItem key="7" value="thunder">
-                thunder
-              </MenuItem>
-              <MenuItem key="8" value="voicerain">
-                voicerain
-              </MenuItem>
-              <MenuItem key="9" value="sleet">
-                sleet
-              </MenuItem>
-              <MenuItem key="10" value="soak">
-                soak
-              </MenuItem>
-              <MenuItem key="11" value="flood">
-                flood
-              </MenuItem>
-              <MenuItem key="12" value="withdraw">
-                withdraw
-              </MenuItem>
-            </Field>
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="server"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeServer(val, prevVal)}
-              label="Server"
-            >
-              {servers && servers.data && servers.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.groupName}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="channel"
-              component={renderSelectField}
-              // onChange={changeServer}
-              label="Channel (optional)"
-            >
-              <MenuItem key="all" value="all">
-                All
-              </MenuItem>
-              {channels && channels.data && channels.data.map((channel) => (
-                <MenuItem key={channel.id} value={channel.id}>
-                  {channel.channelName}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="min"
-              component={renderField}
-              type="number"
-              placeholder="min"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="fee"
-              component={renderField}
-              type="number"
-              placeholder="fee %"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="enabled"
-              component={renderSelectField}
-              // onChange={changeServer}
-              label="Enabled"
-            >
-              <MenuItem key="1" value="enable">
-                Enable
-              </MenuItem>
-              <MenuItem key="2" value="disable">
-                Disable
-              </MenuItem>
-            </Field>
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
-
-      </form>
+      <Form
+        onSubmit={async (values) => {
+          await dispatch(addFeature(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.name) {
+            errors.name = 'Name is required'
+          }
+          if (!values.itemFamily) {
+            errors.itemFamily = 'Name is itemFamily'
+          }
+          if (!values.itemDifficulty) {
+            errors.itemDifficulty = 'Name is itemDifficulty'
+          }
+          return errors;
+        }}
+      >
+        {({
+          form,
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={4}>
+                <Field
+                  name="feature"
+                  component={SelectField}
+                  label="Feature"
+                >
+                  <MenuItem key="1" value="tip">
+                    tip
+                  </MenuItem>
+                  <MenuItem key="2" value="rain">
+                    rain
+                  </MenuItem>
+                  <MenuItem key="3" value="reactdrop">
+                    reactdrop
+                  </MenuItem>
+                  <MenuItem key="4" value="faucet">
+                    faucet
+                  </MenuItem>
+                  <MenuItem key="5" value="hurricane">
+                    hurricane
+                  </MenuItem>
+                  <MenuItem key="6" value="thunderstorm">
+                    thunderstorm
+                  </MenuItem>
+                  <MenuItem key="7" value="thunder">
+                    thunder
+                  </MenuItem>
+                  <MenuItem key="8" value="voicerain">
+                    voicerain
+                  </MenuItem>
+                  <MenuItem key="9" value="sleet">
+                    sleet
+                  </MenuItem>
+                  <MenuItem key="10" value="soak">
+                    soak
+                  </MenuItem>
+                  <MenuItem key="11" value="flood">
+                    flood
+                  </MenuItem>
+                  <MenuItem key="12" value="withdraw">
+                    withdraw
+                  </MenuItem>
+                </Field>
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="server"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeServer(null, value)
+                    return value;
+                  }}
+                  label="Server"
+                >
+                  {servers && servers.data && servers.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.groupName}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="channel"
+                  component={SelectField}
+                  label="Channel (optional)"
+                >
+                  <MenuItem key="all" value="all">
+                    All
+                  </MenuItem>
+                  {channels && channels.data && channels.data.map((channel) => (
+                    <MenuItem key={channel.id} value={channel.id}>
+                      {channel.channelName}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="min"
+                  component={RenderTextField}
+                  type="number"
+                  placeholder="min"
+                  label="min"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="fee"
+                  component={RenderTextField}
+                  type="number"
+                  placeholder="fee %"
+                  label="fee %"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="enabled"
+                  component={SelectField}
+                  label="Enabled"
+                >
+                  <MenuItem key="1" value="enable">
+                    Enable
+                  </MenuItem>
+                  <MenuItem key="2" value="disable">
+                    Disable
+                  </MenuItem>
+                </Field>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
       <TableContainer>
         <Table
           size="small"
@@ -529,6 +512,4 @@ const validate = (formProps) => {
   return errors;
 }
 
-// const selector = formValueSelector('profile');
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'adminCountries', validate })(FeaturesView));
+export default connect(mapStateToProps, null)(FeaturesView);

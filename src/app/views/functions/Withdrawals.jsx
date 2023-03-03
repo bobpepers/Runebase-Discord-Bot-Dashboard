@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
@@ -9,7 +10,6 @@ import {
   CircularProgress,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { withRouter } from '../../hooks/withRouter';
 import {
   fetchWithdrawalsAction,
@@ -18,15 +18,27 @@ import {
 } from '../../actions/withdrawals';
 import WithdrawalsTable from '../../components/functions/WithdrawalsTable';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
+const PREFIX = 'Withdrawals';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+  selectEmpty: `${PREFIX}-selectEmpty`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(1),
     minWidth: 120,
     width: '100%',
   },
-  selectEmpty: {
+
+  [`& .${classes.selectEmpty}`]: {
     marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 const WithdrawalsView = function (props) {
@@ -36,7 +48,7 @@ const WithdrawalsView = function (props) {
     declineWithdrawal,
   } = props;
   const dispatch = useDispatch();
-  const classes = useStyles();
+
   const [id, setId] = useState('');
   const [txId, setTxId] = useState('');
   const [userId, setUserId] = useState('');
@@ -100,7 +112,7 @@ const WithdrawalsView = function (props) {
   ]);
 
   return (
-    <div className="height100 content">
+    <Root className="height100 content">
       <Grid container>
         <Grid item xs={12}>
           <h3>Withdrawals</h3>
@@ -190,8 +202,8 @@ const WithdrawalsView = function (props) {
 
         </Grid>
       </Grid>
-    </div>
-  )
+    </Root>
+  );
 }
 
 const mapStateToProps = (state) => ({

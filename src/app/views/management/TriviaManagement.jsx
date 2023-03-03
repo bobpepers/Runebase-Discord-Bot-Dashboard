@@ -2,8 +2,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
 import { connect, useDispatch } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
 import {
@@ -19,23 +19,32 @@ import {
   switchTriviaAction,
 } from '../../actions/trivia';
 
-const styles = {
-  card: {
+const PREFIX = 'TriviaManagement';
+
+const classes = {
+  card: `${PREFIX}-card`,
+  bullet: `${PREFIX}-bullet`,
+  title: `${PREFIX}-title`,
+  pos: `${PREFIX}-pos`
+};
+
+const Root = styled('div')({
+  [`& .${classes.card}`]: {
     minWidth: 275,
     margin: '50px',
   },
-  bullet: {
+  [`& .${classes.bullet}`]: {
     display: 'inline-block',
     margin: '0 2px',
     transform: 'scale(0.8)',
   },
-  title: {
+  [`& .${classes.title}`]: {
     fontSize: 14,
   },
-  pos: {
+  [`& .${classes.pos}`]: {
     marginBottom: 12,
   },
-};
+});
 
 const TriviaManagement = function (props) {
   const {
@@ -120,7 +129,7 @@ const TriviaManagement = function (props) {
   };
 
   return (
-    <div className="height100 content">
+    <Root className="height100 content">
       <Grid container>
         <Grid item xs={12}>
           Question
@@ -257,7 +266,7 @@ const TriviaManagement = function (props) {
         }
       </Grid>
 
-    </div>
+    </Root>
   );
 }
 
@@ -272,4 +281,4 @@ const mapStateToProps = (state) => ({
   insertTrivia: state.insertTrivia,
 })
 
-export default withStyles(styles)(withRouter(connect(mapStateToProps, null)(TriviaManagement)));
+export default (withRouter(connect(mapStateToProps, null)(TriviaManagement)));

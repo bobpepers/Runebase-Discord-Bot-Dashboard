@@ -16,74 +16,23 @@ import {
   TableHead,
   TableRow,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  FormHelperText,
   MenuItem,
 } from '@mui/material';
 
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
-
+} from 'react-final-form';
 import {
   fetchItemBasesAction,
   addItemBaseAction,
   updateItemBaseAction,
   removeItemBaseAction,
 } from '../../actions/itemBase';
+import { fetchItemDifficultyAction } from '../../actions/itemDifficulty';
+import { fetchItemFamilyAction } from '../../actions/itemFamily';
 
-import {
-  fetchItemDifficultyAction,
-} from '../../actions/itemDifficulty';
-
-import {
-  fetchItemFamilyAction,
-} from '../../actions/itemFamily';
-
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
-
-const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, error },
-  children,
-  ...custom
-}) => (
-  <FormControl className="admin-form-field" style={{ width: '100%' }}>
-    <InputLabel error={touched && error}>{label}</InputLabel>
-    <Select
-      style={{ width: '100%' }}
-      floatingLabelText={label}
-      error={touched && error}
-      {...input}
-      children={children}
-      {...custom}
-    />
-    <FormHelperText error={touched && error}>{error}</FormHelperText>
-  </FormControl>
-)
+import SelectField from '../../components/form/SelectFields';
 
 const ItemsBaseView = function (props) {
   const {
@@ -91,7 +40,6 @@ const ItemsBaseView = function (props) {
     itemBase,
     itemFamily,
     itemDifficulty,
-    handleSubmit,
   } = props;
   const dispatch = useDispatch();
   const [inEditMode, setInEditMode] = useState({
@@ -230,10 +178,6 @@ const ItemsBaseView = function (props) {
     itemDifficulty,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addItemBaseAction(obj));
-  }
-
   const changeItemFamily = (val, preVal) => {
     setItemFamilyId(preVal);
   }
@@ -243,140 +187,185 @@ const ItemsBaseView = function (props) {
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={4}>
-            <Field
-              name="name"
-              component={renderField}
-              type="text"
-              placeholder="name"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="levelReq"
-              component={renderField}
-              type="text"
-              placeholder="levelReq"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="strengthReq"
-              component={renderField}
-              type="text"
-              placeholder="strengthReq"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="dexterityReq"
-              component={renderField}
-              type="text"
-              placeholder="dexterityReq"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="levelMonster"
-              component={renderField}
-              type="text"
-              placeholder="levelMonster"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="durability"
-              component={renderField}
-              type="text"
-              placeholder="durability"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="sockets"
-              component={renderField}
-              type="text"
-              placeholder="sockets"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="minDefense"
-              component={renderField}
-              type="text"
-              placeholder="minDefense"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="maxDefense"
-              component={renderField}
-              type="text"
-              placeholder="maxDefense"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="minDamage"
-              component={renderField}
-              type="text"
-              placeholder="minDamage"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="maxDamage"
-              component={renderField}
-              type="text"
-              placeholder="maxDamage"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="itemFamily"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeItemFamily(val, prevVal)}
-              label="itemFamily"
-            >
-              {itemFamily && itemFamily.data && itemFamily.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.name}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="itemDifficulty"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeItemDifficulty(val, prevVal)}
-              label="itemDifficulty"
-            >
-              {itemDifficulty && itemDifficulty.data && itemDifficulty.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.name}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-              style={{ marginRight: '5px' }}
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
+      <Form
+        onSubmit={async (values) => {
+          await dispatch(addItemBaseAction(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.name) {
+            errors.name = 'Name is required'
+          }
+          if (!values.itemFamily) {
+            errors.itemFamily = 'Name is itemFamily'
+          }
+          if (!values.itemDifficulty) {
+            errors.itemDifficulty = 'Name is itemDifficulty'
+          }
+          return errors;
+        }}
+      >
+        {({
+          form,
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={4}>
+                <Field
+                  name="name"
+                  component={TextField}
+                  type="text"
+                  placeholder="name"
+                  label="name"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="levelReq"
+                  component={TextField}
+                  type="text"
+                  placeholder="levelReq"
+                  label="levelReq"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="strengthReq"
+                  component={TextField}
+                  type="text"
+                  placeholder="strengthReq"
+                  label="strengthReq"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="dexterityReq"
+                  component={TextField}
+                  type="text"
+                  placeholder="dexterityReq"
+                  label="dexterityReq"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="levelMonster"
+                  component={TextField}
+                  type="text"
+                  placeholder="levelMonster"
+                  label="levelMonster"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="durability"
+                  component={TextField}
+                  type="text"
+                  placeholder="durability"
+                  label="durability"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="sockets"
+                  component={TextField}
+                  type="text"
+                  placeholder="sockets"
+                  label="sockets"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="minDefense"
+                  component={TextField}
+                  type="text"
+                  placeholder="minDefense"
+                  label="minDefense"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="maxDefense"
+                  component={TextField}
+                  type="text"
+                  placeholder="maxDefense"
+                  label="maxDefense"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="minDamage"
+                  component={TextField}
+                  type="text"
+                  placeholder="minDamage"
+                  label="minDamage"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="maxDamage"
+                  component={TextField}
+                  type="text"
+                  placeholder="maxDamage"
+                  label="maxDamage"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="itemFamily"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeItemFamily(value)
+                    return value;
+                  }}
+                  label="itemFamily"
+                >
+                  {itemFamily && itemFamily.data && itemFamily.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="itemDifficulty"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeItemDifficulty(value)
+                    return value;
+                  }}
+                  label="itemDifficulty"
+                >
+                  {itemDifficulty && itemDifficulty.data && itemDifficulty.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
 
-      </form>
       <TableContainer>
         <Table
           size="small"
@@ -696,20 +685,4 @@ function mapStateToProps(state) {
   };
 }
 
-const validate = (formProps) => {
-  const errors = {};
-  if (!formProps.name) {
-    errors.name = 'Name is required'
-  }
-  if (!formProps.itemFamily) {
-    errors.itemFamily = 'Name is itemFamily'
-  }
-  if (!formProps.itemDifficulty) {
-    errors.itemDifficulty = 'Name is itemDifficulty'
-  }
-  return errors;
-}
-
-// const selector = formValueSelector('profile');
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'itemBase', validate })(ItemsBaseView));
+export default connect(mapStateToProps, null)(ItemsBaseView);

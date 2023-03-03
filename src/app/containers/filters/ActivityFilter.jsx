@@ -2,22 +2,33 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import {
   Grid,
   FormControl,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+const PREFIX = 'ActivityFilter';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+  selectEmpty: `${PREFIX}-selectEmpty`
+};
+
+const StyledGrid = styled(Grid)((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(1),
     minWidth: 120,
     width: '100%',
   },
-  selectEmpty: {
+
+  [`& .${classes.selectEmpty}`]: {
     marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 const ActivityFilter = function (props) {
@@ -34,7 +45,7 @@ const ActivityFilter = function (props) {
     setAmount,
   } = props;
 
-  const classes = useStyles();
+
 
   const handleChangeId = (event) => {
     console.log(event);
@@ -56,7 +67,7 @@ const ActivityFilter = function (props) {
   };
 
   return (
-    <Grid container item xs={12}>
+    <StyledGrid container item xs={12}>
       <Grid container item xs={12} md={4}>
         <FormControl variant="outlined" className={classes.formControl}>
           <TextField
@@ -113,8 +124,8 @@ const ActivityFilter = function (props) {
           />
         </FormControl>
       </Grid>
-    </Grid>
-  )
+    </StyledGrid>
+  );
 }
 
 export default ActivityFilter;

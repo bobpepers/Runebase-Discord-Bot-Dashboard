@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
@@ -9,22 +10,33 @@ import {
   CircularProgress,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { withRouter } from '../../hooks/withRouter';
 import {
   fetchWithdrawalAddressesAction,
 } from '../../actions/withdrawalAddresses';
 import WithdrawalAddressesTable from '../../components/management/WithdrawalAddressesTable';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
+const PREFIX = 'WithdrawalAddresses';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+  selectEmpty: `${PREFIX}-selectEmpty`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(1),
     minWidth: 120,
     width: '100%',
   },
-  selectEmpty: {
+
+  [`& .${classes.selectEmpty}`]: {
     marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 const WithdrawalAddressesView = function (props) {
@@ -33,7 +45,7 @@ const WithdrawalAddressesView = function (props) {
     withdrawalAddresses,
   } = props;
   const dispatch = useDispatch();
-  const classes = useStyles();
+
   const [id, setId] = useState('');
   const [address, setAddress] = useState('');
   const [page, setPage] = useState(0);
@@ -65,7 +77,7 @@ const WithdrawalAddressesView = function (props) {
   useEffect(() => { }, [withdrawalAddresses]);
 
   return (
-    <div className="height100 content">
+    <Root className="height100 content">
       <Grid container>
         <Grid item xs={12}>
           <h3>withdrawalAddresses</h3>
@@ -117,8 +129,8 @@ const WithdrawalAddressesView = function (props) {
 
         </Grid>
       </Grid>
-    </div>
-  )
+    </Root>
+  );
 }
 
 const mapStateToProps = (state) => ({

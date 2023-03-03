@@ -2,8 +2,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
 import {
   useNavigate,
   useParams,
@@ -34,23 +34,32 @@ import {
 } from '../../actions/deposits';
 import WithdrawalsTable from '../../components/functions/WithdrawalsTable';
 
-const styles = {
-  card: {
+const PREFIX = 'User';
+
+const classes = {
+  card: `${PREFIX}-card`,
+  bullet: `${PREFIX}-bullet`,
+  title: `${PREFIX}-title`,
+  pos: `${PREFIX}-pos`
+};
+
+const Root = styled('div')({
+  [`& .${classes.card}`]: {
     minWidth: 275,
     margin: '50px',
   },
-  bullet: {
+  [`& .${classes.bullet}`]: {
     display: 'inline-block',
     margin: '0 2px',
     transform: 'scale(0.8)',
   },
-  title: {
+  [`& .${classes.title}`]: {
     fontSize: 14,
   },
-  pos: {
+  [`& .${classes.pos}`]: {
     marginBottom: 12,
   },
-};
+});
 
 const UserView = function (props) {
   const {
@@ -125,7 +134,7 @@ const UserView = function (props) {
   };
 
   return (
-    <div className="height100 content">
+    <Root className="height100 content">
       <Grid
         container
         spacing={1}
@@ -577,7 +586,7 @@ const UserView = function (props) {
 
         </Grid>
       </Grid>
-    </div>
+    </Root>
   );
 }
 
@@ -594,4 +603,4 @@ const mapStateToProps = (state) => ({
   declineWithdrawal: state.declineWithdrawal,
 })
 
-export default withStyles(styles)(withRouter(connect(mapStateToProps, null)(UserView)));
+export default (withRouter(connect(mapStateToProps, null)(UserView)));

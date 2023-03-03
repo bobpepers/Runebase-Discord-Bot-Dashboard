@@ -24,9 +24,9 @@ import {
 } from '@mui/material';
 
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
+} from 'react-final-form';
 
 import {
   fetchItemModifierLinksAction,
@@ -42,6 +42,8 @@ import {
 import {
   fetchItemModifiersAction,
 } from '../../actions/itemModifier';
+
+import SelectField from '../../components/form/SelectFields';
 
 const renderSelectField = ({
   input,
@@ -67,7 +69,6 @@ const renderSelectField = ({
 const LinkItemModifierToItemTypeView = function (props) {
   const {
     auth,
-    handleSubmit,
     itemType,
     itemFamily,
     itemModifier,
@@ -136,10 +137,6 @@ const LinkItemModifierToItemTypeView = function (props) {
     itemFamily,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addItemModifierLinkAction(obj));
-  }
-
   const changeItemType = (val, preVal) => {
     setItemTypeId(preVal);
   }
@@ -149,54 +146,87 @@ const LinkItemModifierToItemTypeView = function (props) {
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={6}>
-            <Field
-              name="itemType"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeItemType(val, prevVal)}
-              label="itemType"
-            >
-              {itemType && itemType.data && itemType.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.name}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={6}>
-            <Field
-              name="itemModifier"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeItemModifier(val, prevVal)}
-              label="itemModifier"
-            >
-              {itemModifier && itemModifier.data && itemModifier.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.prefix && server.prefix}
-                  {' '}
-                  {server.suffix && server.suffix}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-              style={{ marginRight: '5px' }}
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
+      <Form
+        onSubmit={async (values) => {
+          console.log('submitting values');
+          console.log(values);
+          await dispatch(addItemModifierLinkAction(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.itemModifier) {
+            errors.itemModifier = 'itemModifier is required'
+          }
+          if (!values.itemType) {
+            errors.itemType = 'itemType is required'
+          }
+          return errors;
+        }}
+      >
+        {({
+          form,
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={6}>
+                <Field
+                  name="itemType"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeItemType(null, value)
+                    return value;
+                  }}
+                  label="itemType"
+                >
+                  {itemType && itemType.data && itemType.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={6}>
+                <Field
+                  name="itemModifier"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeItemModifier(null, value)
+                    return value;
+                  }}
+                  label="itemModifier"
+                >
+                  {itemModifier && itemModifier.data && itemModifier.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.prefix && server.prefix}
+                      {' '}
+                      {server.suffix && server.suffix}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
 
-      </form>
       <TableContainer>
         <Table
           size="small"
@@ -340,17 +370,4 @@ function mapStateToProps(state) {
   };
 }
 
-const validate = (formProps) => {
-  const errors = {};
-  if (!formProps.itemModifier) {
-    errors.itemModifier = 'itemModifier is required'
-  }
-  if (!formProps.itemType) {
-    errors.itemType = 'itemType is required'
-  }
-  return errors;
-}
-
-// const selector = formValueSelector('profile');
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'LinkItemModifierToItemType', validate })(LinkItemModifierToItemTypeView));
+export default connect(mapStateToProps, null)(LinkItemModifierToItemTypeView);

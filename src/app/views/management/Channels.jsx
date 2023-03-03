@@ -2,6 +2,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
+import { styled } from '@mui/material/styles';
 import { connect, useDispatch } from 'react-redux';
 import {
   Grid,
@@ -9,7 +10,6 @@ import {
   CircularProgress,
   TextField,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import { withRouter } from '../../hooks/withRouter';
 
 import {
@@ -19,15 +19,27 @@ import {
 
 import ChannelTable from '../../components/management/ChannelTable';
 
-const useStyles = makeStyles((theme) => ({
-  formControl: {
+const PREFIX = 'Channels';
+
+const classes = {
+  formControl: `${PREFIX}-formControl`,
+  selectEmpty: `${PREFIX}-selectEmpty`
+};
+
+const Root = styled('div')((
+  {
+    theme
+  }
+) => ({
+  [`& .${classes.formControl}`]: {
     margin: theme.spacing(1),
     minWidth: 120,
     width: '100%',
   },
-  selectEmpty: {
+
+  [`& .${classes.selectEmpty}`]: {
     marginTop: theme.spacing(2),
-  },
+  }
 }));
 
 function ChannelsView(props) {
@@ -36,7 +48,7 @@ function ChannelsView(props) {
     channels,
   } = props;
   const dispatch = useDispatch();
-  const classes = useStyles();
+
   const [id, setId] = useState('');
   const [channelId, setchannelId] = useState('');
   const [channelName, setchannelName] = useState('');
@@ -82,7 +94,7 @@ function ChannelsView(props) {
   useEffect(() => { }, [channels]);
 
   return (
-    <div className="height100 content">
+    <Root className="height100 content">
       <Grid container>
         <Grid item xs={12}>
           <h3>Channels</h3>
@@ -147,8 +159,8 @@ function ChannelsView(props) {
 
         </Grid>
       </Grid>
-    </div>
-  )
+    </Root>
+  );
 }
 
 const mapStateToProps = (state) => ({

@@ -15,18 +15,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  FormControl,
-  FormHelperText,
   MenuItem,
-  InputLabel,
-  Select,
 } from '@mui/material';
 
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
+} from 'react-final-form';
 
 import {
   fetchItemFamilyAction,
@@ -38,53 +33,12 @@ import {
 import {
   fetchItemTypeAction,
 } from '../../actions/itemType';
-
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
-
-const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, error },
-  children,
-  ...custom
-}) => (
-  <FormControl className="admin-form-field" style={{ width: '100%' }}>
-    <InputLabel error={touched && error}>{label}</InputLabel>
-    <Select
-      style={{ width: '100%' }}
-      floatingLabelText={label}
-      error={touched && error}
-      {...input}
-      children={children}
-      {...custom}
-    />
-    <FormHelperText error={touched && error}>{error}</FormHelperText>
-  </FormControl>
-)
+import SelectField from '../../components/form/SelectFields';
+import TextField from '../../components/form/TextField';
 
 const ItemsFamiliesView = function (props) {
   const {
     auth,
-    handleSubmit,
     itemType,
     itemFamily,
   } = props;
@@ -149,56 +103,83 @@ const ItemsFamiliesView = function (props) {
     itemFamily,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addItemFamilyAction(obj));
-  }
-
-  const changeItemType = (val, preVal) => {
-    setItemTypeId(preVal);
+  const changeItemType = (val) => {
+    setItemTypeId(val);
   }
 
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={4}>
-            <Field
-              name="name"
-              component={renderField}
-              type="text"
-              placeholder="name"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="itemType"
-              component={renderSelectField}
-              onChange={(val, prevVal) => changeItemType(val, prevVal)}
-              label="itemType"
-            >
-              {itemType && itemType.data && itemType.data.map((server) => (
-                <MenuItem key={server.id} value={server.id}>
-                  {server.name}
-                </MenuItem>
-              ))}
-            </Field>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-              style={{ marginRight: '5px' }}
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
+      <Form
+        onSubmit={async (values) => {
+          await dispatch(addItemFamilyAction(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.name) {
+            errors.name = 'Name is required'
+          }
+          if (!values.itemFamily) {
+            errors.itemFamily = 'Name is itemFamily'
+          }
+          if (!values.itemDifficulty) {
+            errors.itemDifficulty = 'Name is itemDifficulty'
+          }
+          return errors;
+        }}
+      >
+        {({
+          form,
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={4}>
+                <Field
+                  name="name"
+                  component={TextField}
+                  type="text"
+                  placeholder="name"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="itemType"
+                  component={SelectField}
+                  parse={(value) => {
+                    changeItemType(value)
+                    return value;
+                  }}
+                  label="itemType"
+                >
+                  {itemType && itemType.data && itemType.data.map((server) => (
+                    <MenuItem key={server.id} value={server.id}>
+                      {server.name}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
 
-      </form>
       <TableContainer>
         <Table
           size="small"
@@ -334,18 +315,4 @@ function mapStateToProps(state) {
     itemFamily: state.itemFamily,
   };
 }
-
-const validate = (formProps) => {
-  const errors = {};
-  if (!formProps.name) {
-    errors.name = 'Name is required'
-  }
-  if (!formProps.itemType) {
-    errors.itemType = 'itemType is required'
-  }
-  return errors;
-}
-
-// const selector = formValueSelector('profile');
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'itemFamily', validate })(ItemsFamiliesView));
+export default connect(mapStateToProps, null)(ItemsFamiliesView);

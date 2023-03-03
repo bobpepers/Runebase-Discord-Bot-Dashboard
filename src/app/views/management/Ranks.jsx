@@ -15,69 +15,25 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
 } from '@mui/material';
-
 import {
-  reduxForm,
+  Form,
   Field,
-  change,
-} from 'redux-form';
-
+} from 'react-final-form';
 import {
   fetchRanksAction,
   addRankAction,
   updateRankAction,
   removeRankAction,
 } from '../../actions/ranks';
-
-import {
-  fetchServerAction,
-  banServerAction,
-} from '../../actions/servers';
-
-const renderField = ({
-  input,
-  type,
-  placeholder,
-  meta,
-  disabled,
-}) => {
-  // console.log(input);
-  console.log(disabled);
-  return (
-    <div className={`input-group ${meta.touched && meta.error ? 'has-error' : ''}`}>
-      <FormControl
-        variant="outlined"
-        fullWidth
-      >
-        <TextField
-          // className="outlined-email-field"
-          label={placeholder}
-          type={type}
-          variant="outlined"
-          inputProps={{
-            className: 'outlined-email-field',
-            value: meta.initial,
-          }}
-          disabled={disabled}
-          {...input}
-        />
-        {meta.touched && meta.error && <div className="form-error">{meta.error}</div>}
-      </FormControl>
-    </div>
-  )
-};
+import { fetchServerAction } from '../../actions/servers';
+import TextField from '../../components/form/TextField';
 
 const RanksManagementView = function (props) {
   const {
     auth,
     ranks,
     servers,
-    handleSubmit,
   } = props;
   const dispatch = useDispatch();
   const [inEditMode, setInEditMode] = useState({
@@ -143,15 +99,15 @@ const RanksManagementView = function (props) {
     setUnitRole(null);
   }
 
-  useEffect(() => {
-    // dispatch(fetchServerAction());
-    dispatch(fetchRanksAction(
-      unitServerId,
-    ));
-    dispatch(change('ranks', 'groupId', unitServerId));
-  }, [
-    unitServerId,
-  ]);
+  // useEffect(() => {
+  //   // dispatch(fetchServerAction());
+  //   dispatch(fetchRanksAction(
+  //     unitServerId,
+  //   ));
+  //   dispatch(change('ranks', 'groupId', unitServerId));
+  // }, [
+  //   unitServerId,
+  // ]);
 
   useEffect(() => {
     dispatch(fetchServerAction(
@@ -171,15 +127,6 @@ const RanksManagementView = function (props) {
     ranks,
     unitServerId,
   ]);
-
-  const handleFormSubmit = async (obj) => {
-    change('ranks', 'groupId', unitServerId);
-    await dispatch(change('ranks', 'groupId', unitServerId));
-    console.log(obj);
-    await dispatch(
-      addRankAction(obj),
-    );
-  }
 
   const handleServerPick = async (serverId) => {
     setUnitServerId(serverId);
@@ -211,68 +158,110 @@ const RanksManagementView = function (props) {
         </div>
       ) : (
         <>
-          <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-            <Grid container>
-              <Grid item xs={4}>
-                <Field
-                  name="name"
-                  component={renderField}
-                  type="text"
-                  placeholder="name"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Field
-                  name="level"
-                  component={renderField}
-                  type="text"
-                  placeholder="level"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Field
-                  name="expNeeded"
-                  component={renderField}
-                  type="text"
-                  placeholder="expNeeded"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Field
-                  name="roleId"
-                  component={renderField}
-                  type="text"
-                  placeholder="roleId"
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <Field
-                  name="groupId"
-                  component={renderField}
-                  type="text"
-                  placeholder="groupId"
-                  meta={{ initial: `${unitServerId}` }}
-                  props={{
-                    disabled: true, // like this
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  className="btn"
-                  fullWidth
-                  size="large"
-                  style={{ marginRight: '5px' }}
-                >
-                  Add
-                </Button>
-              </Grid>
-            </Grid>
+          <Form
+            onSubmit={async (values) => {
+              await dispatch(addRankAction(values));
+            }}
+            validate={(values) => {
+              const errors = {};
+              if (!values.channel) {
+                errors.channel = 'Server is required'
+              }
+              if (!values.message) {
+                errors.message = 'Message is required'
+              }
+              if (!values.cron) {
+                errors.cron = 'Cron is required'
+              }
+              if (!values.embed) {
+                errors.embed = 'Embed is required'
+              }
+              return errors;
+            }}
+          >
+            {({
+              form,
+              handleSubmit,
+              values,
+              submitting,
+              pristine,
+            }) => (
+              <form onSubmit={handleSubmit}>
+                <Grid container>
+                  <Grid item xs={4}>
+                    <Field
+                      name="name"
+                      component={TextField}
+                      type="text"
+                      placeholder="name"
+                      label="name"
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Field
+                      name="level"
+                      component={TextField}
+                      type="text"
+                      placeholder="level"
+                      label="level"
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Field
+                      name="expNeeded"
+                      component={TextField}
+                      type="text"
+                      placeholder="expNeeded"
+                      label="expNeeded"
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Field
+                      name="roleId"
+                      component={TextField}
+                      type="text"
+                      placeholder="roleId"
+                      label="roleId"
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <Field
+                      name="groupId"
+                      component={TextField}
+                      type="text"
+                      placeholder="groupId"
+                      label="roleId"
+                      meta={{ initial: `${unitServerId}` }}
+                      props={{
+                        disabled: true, // like this
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      className="btn"
+                      fullWidth
+                      size="large"
+                      style={{ marginLeft: '5px' }}
+                      disabled={pristine || submitting}
+                      onClick={() => {
+                        dispatch(fetchRanksAction(
+                          unitServerId,
+                        ));
+                        dispatch(form.change('ranks', 'groupId', unitServerId));
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </Grid>
+                </Grid>
 
-          </form>
+              </form>
+            )}
+          </Form>
           <TableContainer>
             <Table
               size="small"
@@ -457,8 +446,4 @@ const validate = (formProps) => {
 
 // const selector = formValueSelector('profile');
 
-export default connect(mapStateToProps, null)(reduxForm({
-  form: 'ranks',
-  enableReinitialize: true,
-  validate,
-})(RanksManagementView));
+export default connect(mapStateToProps, null)(RanksManagementView);

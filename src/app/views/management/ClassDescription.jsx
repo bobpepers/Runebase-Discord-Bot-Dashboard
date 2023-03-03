@@ -15,14 +15,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  FormControl,
 } from '@mui/material';
 
 import {
-  reduxForm,
+  Form,
   Field,
-} from 'redux-form';
+} from 'react-final-form';
 
 import {
   fetchClassDescriptionsAction,
@@ -30,33 +28,12 @@ import {
   updateClassDescriptionAction,
   removeClassDescriptionAction,
 } from '../../actions/classDescriptions';
-
-const renderField = ({
-  input, type, placeholder, meta: { touched, error },
-}) => (
-  <div className={`input-group ${touched && error ? 'has-error' : ''}`}>
-    <FormControl
-      variant="outlined"
-      fullWidth
-    >
-      <TextField
-        // className="outlined-email-field"
-        label={placeholder}
-        type={type}
-        variant="outlined"
-        inputProps={{ className: 'outlined-email-field' }}
-        {...input}
-      />
-      {touched && error && <div className="form-error">{error}</div>}
-    </FormControl>
-  </div>
-);
+import TextField from '../../components/form/TextField';
 
 const ClassDescriptionsView = function (props) {
   const {
     auth,
     classDescriptions,
-    handleSubmit,
   } = props;
   const dispatch = useDispatch();
   const [inEditMode, setInEditMode] = useState({
@@ -117,54 +94,105 @@ const ClassDescriptionsView = function (props) {
     classDescriptions,
   ]);
 
-  const handleFormSubmit = async (obj) => {
-    await dispatch(addClassDescriptionAction(obj));
-  }
-
   return (
     <div className="content index600 height100 w-100 transactions transaction">
-      <form onSubmit={handleSubmit(handleFormSubmit)} style={{ width: '100%' }}>
-        <Grid container>
-          <Grid item xs={4}>
-            <Field
-              name="name"
-              component={renderField}
-              type="text"
-              placeholder="name"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="description"
-              component={renderField}
-              type="text"
-              placeholder="description"
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <Field
-              name="image"
-              component={renderField}
-              type="text"
-              placeholder="image"
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              className="btn"
-              fullWidth
-              size="large"
-              style={{ marginRight: '5px' }}
-            >
-              Add
-            </Button>
-          </Grid>
-        </Grid>
+      <Form
+        onSubmit={async (values) => {
+          await dispatch(addClassDescriptionAction(values));
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.name) {
+            errors.name = 'Name is required'
+          }
+          if (!values.strength) {
+            errors.strength = 'strength is required'
+          }
+          if (!values.dexterity) {
+            errors.dexterity = 'dexterity is required'
+          }
+          if (!values.vitality) {
+            errors.vitality = 'vitality is required'
+          }
+          if (!values.energy) {
+            errors.energy = 'energy is required'
+          }
+          if (!values.life) {
+            errors.life = 'life is required'
+          }
+          if (!values.mana) {
+            errors.mana = 'mana is required'
+          }
+          if (!values.stamina) {
+            errors.stamina = 'stamina is required'
+          }
+          if (!values.attackRating) {
+            errors.attackRating = 'attackRating is required'
+          }
+          if (!values.defense) {
+            errors.defense = 'defense is required'
+          }
+          if (!values.description) {
+            errors.description = 'description is required'
+          }
 
-      </form>
+          return errors;
+        }}
+      >
+        {({
+          handleSubmit,
+          values,
+          submitting,
+          pristine,
+        }) => (
+          <form onSubmit={handleSubmit}>
+            <Grid container>
+              <Grid item xs={4}>
+                <Field
+                  name="name"
+                  component={TextField}
+                  type="text"
+                  placeholder="name"
+                  label="name"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="description"
+                  component={TextField}
+                  type="text"
+                  placeholder="description"
+                  label="description"
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <Field
+                  name="image"
+                  component={TextField}
+                  type="text"
+                  placeholder="image"
+                  label="image"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  className="btn"
+                  fullWidth
+                  size="large"
+                  style={{ marginLeft: '5px' }}
+                  disabled={pristine || submitting}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      </Form>
+
       <TableContainer>
         <Table
           size="small"
@@ -322,6 +350,4 @@ const validate = (formProps) => {
   return errors;
 }
 
-// const selector = formValueSelector('profile');
-
-export default connect(mapStateToProps, null)(reduxForm({ form: 'classDescription', validate })(ClassDescriptionsView));
+export default connect(mapStateToProps, null)(ClassDescriptionsView);
