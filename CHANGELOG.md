@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.4...v0.0.5) (2023-03-03)
+
+
+### Bug Fixes
+
+* ⬆️ up deps, fix breaking change, redux-form -> react-final-form ([68ee641](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/68ee64174ba55106986736d4d127f4da1f87e016))
+* 🔥 remove redux-form from reducer ([55b7493](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/55b7493e92ed6e3b83339772ccb8493cd084c197))
+
 ### [0.0.4](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.3...v0.0.4) (2023-02-26)
 
 
