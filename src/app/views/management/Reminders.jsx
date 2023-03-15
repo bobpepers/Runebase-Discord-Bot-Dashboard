@@ -17,6 +17,7 @@ import {
   TableRow,
   Select,
   MenuItem,
+  TextField,
 } from '@mui/material';
 
 import {
@@ -33,7 +34,7 @@ import {
 import { fetchServerAction } from '../../actions/servers';
 import { fetchChannelsAction } from '../../actions/channels';
 import SelectField from '../../components/form/SelectFields';
-import TextField from '../../components/form/TextField';
+import GenerateTextField from '../../components/form/TextField';
 
 const RemindersView = function (props) {
   const {
@@ -210,7 +211,7 @@ const RemindersView = function (props) {
               <Grid item xs={6}>
                 <Field
                   name="cron"
-                  component={TextField}
+                  component={GenerateTextField}
                   type="text"
                   placeholder="cron"
                 />
@@ -232,7 +233,7 @@ const RemindersView = function (props) {
               <Grid item xs={12}>
                 <Field
                   name="message"
-                  component={TextField}
+                  component={GenerateTextField}
                   type="text"
                   placeholder="message"
                 />
