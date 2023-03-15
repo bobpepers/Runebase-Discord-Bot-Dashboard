@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.5...v0.0.6) (2023-03-15)
+
+
+### Bug Fixes
+
+* 🐛 Fix Textfield issue in reminder management ([13ad70f](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/13ad70f2d2fb2afef855ac53aacfa9f1923aa4dd))
+
 ### [0.0.5](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.4...v0.0.5) (2023-03-03)
 
 
