@@ -1,27 +1,27 @@
 import axios from '../axios';
 import {
-  PATCH_DEPOSITS_BEGIN,
-  PATCH_DEPOSITS_SUCCESS,
-  PATCH_DEPOSITS_FAIL,
+  PATCH_PARTNERS_BEGIN,
+  PATCH_PARTNERS_SUCCESS,
+  PATCH_PARTNERS_FAIL,
   ENQUEUE_SNACKBAR,
 } from './types/index';
 import { notistackErrorAdd } from './helpers/notistackError';
 
-export function patchDepositsAction() {
+export function patchPartnersAction() {
   return function (dispatch) {
     dispatch({
-      type: PATCH_DEPOSITS_BEGIN,
+      type: PATCH_PARTNERS_BEGIN,
     });
-    axios.post(`${window.myConfig.apiUrl}/deposits/patch`)
+    axios.post(`${window.myConfig.apiUrl}/partners/patch`)
       .then((response) => {
         dispatch({
-          type: PATCH_DEPOSITS_SUCCESS,
+          type: PATCH_PARTNERS_SUCCESS,
           payload: response.data.result,
         });
         dispatch({
           type: ENQUEUE_SNACKBAR,
           notification: {
-            message: 'Success: patch deposits success',
+            message: 'Success: patch partners success',
             key: new Date().getTime() + Math.random(),
             options: {
               variant: 'success',
@@ -34,7 +34,7 @@ export function patchDepositsAction() {
           error,
         );
         dispatch({
-          type: PATCH_DEPOSITS_FAIL,
+          type: PATCH_PARTNERS_FAIL,
           payload: error,
         });
       });

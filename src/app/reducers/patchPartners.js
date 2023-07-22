@@ -1,7 +1,7 @@
 import {
-  PATCH_DEPOSITS_BEGIN,
-  PATCH_DEPOSITS_SUCCESS,
-  PATCH_DEPOSITS_FAIL,
+  PATCH_PARTNERS_BEGIN,
+  PATCH_PARTNERS_SUCCESS,
+  PATCH_PARTNERS_FAIL,
 } from '../actions/types/index';
 
 const initialState = {
@@ -11,19 +11,19 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-  case PATCH_DEPOSITS_BEGIN:
+  case PATCH_PARTNERS_BEGIN:
     return {
       ...state,
       isFetching: true,
       error: null,
     };
-  case PATCH_DEPOSITS_SUCCESS:
+  case PATCH_PARTNERS_SUCCESS:
     return {
       ...state,
       data: action.payload,
       isFetching: false,
     };
-  case PATCH_DEPOSITS_FAIL:
+  case PATCH_PARTNERS_FAIL:
     console.log('Error: ', action.error);
     return {
       ...state,

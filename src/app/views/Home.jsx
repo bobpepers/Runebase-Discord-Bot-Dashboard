@@ -34,8 +34,8 @@ import {
   fetchLiabilityAction,
 } from '../actions/liability';
 import {
-  patchDepositsAction,
-} from '../actions/patchDeposits';
+  patchPartnersAction,
+} from '../actions/patchPartners';
 
 import {
   fetchBalanceAction,
@@ -51,7 +51,7 @@ const classes = {
   card: `${PREFIX}-card`,
   bullet: `${PREFIX}-bullet`,
   title: `${PREFIX}-title`,
-  pos: `${PREFIX}-pos`
+  pos: `${PREFIX}-pos`,
 };
 
 const Root = styled('div')({
@@ -123,8 +123,8 @@ const Home = function (props) {
     ],
   );
 
-  const patchDepositsFunction = () => {
-    dispatch(patchDepositsAction())
+  const patchPartnersFunction = () => {
+    dispatch(patchPartnersAction())
   }
   const startSyncFunction = () => {
     dispatch(startSyncAction())
@@ -386,14 +386,14 @@ const Home = function (props) {
           xs={4}
         >
           {
-            patchDeposits.isFetching ? (
+            patchPartners.isFetching ? (
               <CircularProgress />
             ) : (
               <Button
                 variant="contained"
-                onClick={() => patchDepositsFunction()}
+                onClick={() => patchPartnersFunction()}
               >
-                Patch Deposits
+                Patch Partners
               </Button>
             )
           }
@@ -491,7 +491,7 @@ const mapStateToProps = (state) => ({
   nodeStatus: state.nodeStatus,
   liability: state.liability,
   balance: state.balance,
-  patchDeposits: state.patchDeposits,
+  patchPartners: state.patchPartners,
   faucetBalance: state.faucetBalance,
   blockNumber: state.blockNumber,
   startSync: state.startSync,

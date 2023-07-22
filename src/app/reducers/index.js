@@ -19,7 +19,7 @@ import botSettings from './botSettings';
 
 import acceptWithdrawal from './acceptWithdrawal';
 import declineWithdrawal from './declineWithdrawal';
-import patchDeposits from './patchDeposits';
+import patchPartners from './patchPartners';
 import faucetBalance from './faucetBalance';
 import blockNumber from './blockNumber';
 import startSync from './startSync';
@@ -71,7 +71,7 @@ const store = configureStore({
     acceptWithdrawal,
     declineWithdrawal,
     botSettings,
-    patchDeposits,
+    patchPartners,
     faucetBalance,
     blockNumber,
     startSync,
