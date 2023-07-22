@@ -78,7 +78,7 @@ const Home = function (props) {
     nodeStatus,
     liability,
     balance,
-    patchDeposits,
+    patchPartners,
     faucetBalance,
     blockNumber,
     startSync,
