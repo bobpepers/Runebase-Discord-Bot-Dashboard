@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.7...v0.0.8) (2023-07-22)
+
+
+### Features
+
+* ♻️ Remove unused deposit patcher, Add Partners patcher ([08edf54](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/08edf54c23e0fe51d3d9cbba105c8c05c76d6e17))
+
+
+### Bug Fixes
+
+* 🩹 add missing patchPartners prop ([4f0c74e](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/4f0c74ea0ffe41e22550b48934fa7dd16bcc917d))
+
 ### [0.0.7](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.6...v0.0.7) (2023-04-14)
 
 ### [0.0.6](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.5...v0.0.6) (2023-03-15)
