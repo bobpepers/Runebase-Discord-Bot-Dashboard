@@ -15,6 +15,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField as MuiTextField,
 } from '@mui/material';
 import {
   Form,
@@ -99,15 +100,15 @@ const RanksManagementView = function (props) {
     setUnitRole(null);
   }
 
-  // useEffect(() => {
-  //   // dispatch(fetchServerAction());
-  //   dispatch(fetchRanksAction(
-  //     unitServerId,
-  //   ));
-  //   dispatch(change('ranks', 'groupId', unitServerId));
-  // }, [
-  //   unitServerId,
-  // ]);
+  useEffect(() => {
+    // dispatch(fetchServerAction());
+    dispatch(fetchRanksAction(
+      unitServerId,
+    ));
+    // dispatch(change('ranks', 'groupId', unitServerId));
+  }, [
+    unitServerId,
+  ]);
 
   useEffect(() => {
     dispatch(fetchServerAction(
@@ -159,22 +160,23 @@ const RanksManagementView = function (props) {
       ) : (
         <>
           <Form
-            onSubmit={async (values) => {
-              await dispatch(addRankAction(values));
+            onSubmit={(values) => {
+              values.groupId = unitServerId;
+              dispatch(addRankAction(values));
             }}
             validate={(values) => {
               const errors = {};
-              if (!values.channel) {
-                errors.channel = 'Server is required'
+              if (!values.name) {
+                errors.name = 'Name is required'
               }
-              if (!values.message) {
-                errors.message = 'Message is required'
+              if (!values.level) {
+                errors.level = 'Level is required'
               }
-              if (!values.cron) {
-                errors.cron = 'Cron is required'
+              if (!values.expNeeded) {
+                errors.expNeeded = 'ExpNeeded is required'
               }
-              if (!values.embed) {
-                errors.embed = 'Embed is required'
+              if (!values.roleId) {
+                errors.roleId = 'RoleID is required'
               }
               return errors;
             }}
@@ -224,7 +226,7 @@ const RanksManagementView = function (props) {
                       label="roleId"
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  {/* <Grid item xs={4}>
                     <Field
                       name="groupId"
                       component={TextField}
@@ -236,7 +238,7 @@ const RanksManagementView = function (props) {
                         disabled: true, // like this
                       }}
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item xs={6}>
                     <Button
                       variant="contained"
@@ -251,14 +253,13 @@ const RanksManagementView = function (props) {
                         dispatch(fetchRanksAction(
                           unitServerId,
                         ));
-                        dispatch(form.change('ranks', 'groupId', unitServerId));
+                      //   dispatch(form.change('ranks', 'groupId', unitServerId));
                       }}
                     >
                       Add
                     </Button>
                   </Grid>
                 </Grid>
-
               </form>
             )}
           </Form>
@@ -291,7 +292,7 @@ const RanksManagementView = function (props) {
                         <TableCell align="right">
                           {
                             inEditMode.status && inEditMode.rowKey === rank.id ? (
-                              <TextField
+                              <MuiTextField
                                 value={unitLevel}
                                 onChange={(event) => setUnitLevel(event.target.value)}
                               />
@@ -304,7 +305,7 @@ const RanksManagementView = function (props) {
                         <TableCell component="th" scope="row" align="right">
                           {
                             inEditMode.status && inEditMode.rowKey === rank.id ? (
-                              <TextField
+                              <MuiTextField
                                 value={unitName}
                                 onChange={(event) => setUnitName(event.target.value)}
                               />
@@ -317,7 +318,7 @@ const RanksManagementView = function (props) {
                         <TableCell align="right">
                           {
                             inEditMode.status && inEditMode.rowKey === rank.id ? (
-                              <TextField
+                              <MuiTextField
                                 value={unitExp}
                                 onChange={(event) => setUnitExp(event.target.value)}
                               />
@@ -330,7 +331,7 @@ const RanksManagementView = function (props) {
                         <TableCell align="right">
                           {
                             inEditMode.status && inEditMode.rowKey === rank.id ? (
-                              <TextField
+                              <MuiTextField
                                 value={unitRole}
                                 onChange={(event) => setUnitRole(event.target.value)}
                               />
