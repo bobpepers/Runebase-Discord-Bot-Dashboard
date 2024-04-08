@@ -208,14 +208,6 @@ const Header = function (props) {
               </Link>
               <Link
                 className="nav-link"
-                to="/management/skilltrees"
-              >
-                <MenuItem onClick={handleCloseManagement}>
-                  Skill Trees
-                </MenuItem>
-              </Link>
-              <Link
-                className="nav-link"
                 to="/management/item/base"
               >
                 <MenuItem onClick={handleCloseManagement}>
@@ -228,38 +220,6 @@ const Header = function (props) {
               >
                 <MenuItem onClick={handleCloseManagement}>
                   LinkItemModifierToItemType
-                </MenuItem>
-              </Link>
-              <Link
-                className="nav-link"
-                to="/management/item/families"
-              >
-                <MenuItem onClick={handleCloseManagement}>
-                  Item Families
-                </MenuItem>
-              </Link>
-              <Link
-                className="nav-link"
-                to="/management/item/modifiers"
-              >
-                <MenuItem onClick={handleCloseManagement}>
-                  Item Modifiers
-                </MenuItem>
-              </Link>
-              <Link
-                className="nav-link"
-                to="/management/class/descriptions"
-              >
-                <MenuItem onClick={handleCloseManagement}>
-                  ClassDescriptions
-                </MenuItem>
-              </Link>
-              <Link
-                className="nav-link"
-                to="/management/classes"
-              >
-                <MenuItem onClick={handleCloseManagement}>
-                  Classes
                 </MenuItem>
               </Link>
               <Link

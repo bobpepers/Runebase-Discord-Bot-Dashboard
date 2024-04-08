@@ -4,7 +4,6 @@ import React, {
 import {
   Route,
   Routes,
-  // useNavigate,
   useLocation,
   Navigate,
   Outlet,
@@ -12,9 +11,7 @@ import {
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import toggleTheme from './helpers/toggleTheme';
-
 import Home from './views/Home';
-// import Activity from './views/Activity';
 import Settings from './views/Settings';
 import Register from './views/register/Register';
 import RegisterVerify from './views/register/RegisterVerify';
@@ -34,13 +31,6 @@ import PriceCurrenciesManagement from './views/management/PriceCurrencies';
 import WithdrawalAddressesView from './views/management/WithdrawalAddresses';
 import WithdrawalAddressView from './views/management/WithdrawalAddress';
 import RanksManagementView from './views/management/Ranks';
-import ClassDescriptionsView from './views/management/ClassDescription';
-import ClassesView from './views/management/Classes';
-import ItemsFamiliesView from './views/management/ItemFamily';
-import ItemsModifiersView from './views/management/ItemModifiers';
-import ItemsBaseView from './views/management/itemBase';
-import SkillTreesView from './views/management/SkillTrees';
-import LinkItemModifierToItemTypeView from './views/management/LinkItemModifierToItemType';
 import Deposits from './views/functions/Deposits';
 import Withdrawals from './views/functions/Withdrawals';
 import Errors from './views/functions/Errors';
@@ -168,36 +158,6 @@ const RoutesX = function (props) {
           path="/management/ranks"
           element={<RanksManagementView />}
         />
-        <Route
-          path="/management/skilltrees"
-          element={<SkillTreesView />}
-        />
-        <Route
-          path="/management/item/base"
-          element={<ItemsBaseView />}
-        />
-        <Route
-          path="/management/item/families"
-          element={<ItemsFamiliesView />}
-        />
-        <Route
-          path="/management/item/modifiers"
-          element={<ItemsModifiersView />}
-        />
-        <Route
-          path="/management/item/LinkItemModifierToItemType"
-          element={<LinkItemModifierToItemTypeView />}
-        />
-
-        <Route
-          path="/management/classes"
-          element={<ClassesView />}
-        />
-        <Route
-          path="/management/class/descriptions"
-          element={<ClassDescriptionsView />}
-        />
-
         <Route
           path="/settings"
           element={<Settings />}

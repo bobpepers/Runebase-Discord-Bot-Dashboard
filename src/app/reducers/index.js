@@ -34,16 +34,6 @@ import botFunctions from './botFunctions';
 import botFunction from './botFunction';
 
 import ranks from './ranks';
-import classDescriptions from './classDescriptions';
-import classes from './class';
-import itemType from './itemType';
-import itemFamily from './itemFamily';
-import itemQuality from './itemQuality';
-import itemModifier from './itemModifier';
-import itemModifierItemType from './itemModifierItemType';
-import itemBase from './itemBase';
-import itemDifficulty from './itemDifficulty';
-import skilltrees from './skilltrees';
 import reminders from './reminders';
 
 const store = configureStore({
@@ -86,17 +76,6 @@ const store = configureStore({
     botFunction,
 
     ranks,
-    classDescriptions,
-    classes,
-
-    itemType,
-    itemFamily,
-    itemQuality,
-    itemModifier,
-    itemModifierItemType,
-    itemBase,
-    itemDifficulty,
-    skilltrees,
   },
 })
 
