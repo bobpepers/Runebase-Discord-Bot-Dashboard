@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.9](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.8...v0.0.9) (2024-04-08)
+
+
+### Bug Fixes
+
+* :zap: Activity frontend fix ([5a37660](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/5a3766073cc25fab2a0d071a1a5e73a62a825693))
+* 🐛 Fix issue with Ranks form ([ecd1cbf](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/ecd1cbf69aee71cc5e10d0ad420e68db925da064))
+
 ### [0.0.8](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.7...v0.0.8) (2023-07-22)
 
 
