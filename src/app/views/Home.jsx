@@ -130,16 +130,8 @@ const Home = function (props) {
     dispatch(startSyncAction())
   }
 
-  const routeChangeExample = () => {
-    const path = 'bridge';
-    navigate(path);
-  }
-
-  const [id, setId] = useState('');
-  const [spender, setSpender] = useState('');
-  const [earner, setEarner] = useState('');
-  const [type, setType] = useState('');
-  const [amount, setAmount] = useState('');
+  const [userId, setUserId] = useState('');
+  const [activityType, setActivityType] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(50);
 
   return (
@@ -454,26 +446,17 @@ const Home = function (props) {
         </Grid>
         <Grid item xs={12}>
           <ActivityFilter
-            id={id}
-            setId={setId}
-            spender={spender}
-            setSpender={setSpender}
-            earner={earner}
-            setEarner={setEarner}
-            type={type}
-            setType={setType}
-            amount={amount}
-            setAmount={setAmount}
+            userId={userId}
+            setUserId={setUserId}
+            activityType={activityType}
+            setActivityType={setActivityType}
           />
         </Grid>
 
         <Grid item xs={12}>
           <ActivityContainer
-            id={id}
-            spender={spender}
-            earner={earner}
-            type={type}
-            amount={amount}
+            userId={userId}
+            activityType={activityType}
             rowsPerPage={rowsPerPage}
           />
         </Grid>

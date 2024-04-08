@@ -11,25 +11,17 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { io } from 'socket.io-client';
-import {
-  fetchActivityAction,
-} from '../actions/activity';
+import { fetchActivityAction } from '../actions/activity';
 import ActivityComponent from '../components/Activity';
 import { withRouter } from '../hooks/withRouter';
-
-import {
-  INSERT_ACTIVITY,
-} from '../actions/types/index';
+import { INSERT_ACTIVITY } from '../actions/types/index';
 
 const ActivityContainer = function (props) {
   const {
     auth,
     activity,
-    id,
-    spender,
-    earner,
-    type,
-    amount,
+    userId,
+    activityType,
     rowsPerPage,
   } = props;
   const dispatch = useDispatch();
@@ -39,22 +31,16 @@ const ActivityContainer = function (props) {
   useEffect(() => {
     if (auth.authenticated) {
       dispatch(fetchActivityAction(
-        id,
-        spender,
-        earner,
-        type,
-        amount,
+        userId,
+        activityType,
         (page - 1) * rowsPerPage,
         rowsPerPage,
       ));
     }
   }, [
     auth,
-    id,
-    spender,
-    earner,
-    type,
-    amount,
+    userId,
+    activityType,
     page,
     rowsPerPage,
   ]);
@@ -65,55 +51,26 @@ const ActivityContainer = function (props) {
     });
 
     socket.on('updateActivity', (data) => {
-      console.log('updateActivity');
-      console.log(data);
       if (page === 1) {
         if (
-          id === ''
-          && spender === ''
-          && earner === ''
-          && type === ''
-          && amount === ''
+          userId === ''
+          && activityType === ''
         ) {
           dispatch({
             type: INSERT_ACTIVITY,
             payload: data.activity,
           });
         }
-        if (id !== '') {
-          if (data.activity.id.includes(id)) {
+        if (userId !== '') {
+          if (data.activity.userId.includes(userId)) {
             dispatch({
               type: INSERT_ACTIVITY,
               payload: data.activity,
             });
           }
         }
-        if (spender !== '') {
-          if (data.activity.spender.username.includes(spender)) {
-            dispatch({
-              type: INSERT_ACTIVITY,
-              payload: data.activity,
-            });
-          }
-        }
-        if (earner !== '') {
-          if (data.activity.earner.username.includes(earner)) {
-            dispatch({
-              type: INSERT_ACTIVITY,
-              payload: data.activity,
-            });
-          }
-        }
-        if (type !== '') {
-          if (data.activity.type.includes(type)) {
-            dispatch({
-              type: INSERT_ACTIVITY,
-              payload: data.activity,
-            });
-          }
-        }
-        if (amount !== '') {
-          if (data.activity.amount.includes(amount)) {
+        if (activityType !== '') {
+          if (data.activity.activity.includes(activityType)) {
             dispatch({
               type: INSERT_ACTIVITY,
               payload: data.activity,
@@ -128,34 +85,26 @@ const ActivityContainer = function (props) {
 
   useEffect(() => { }, [activity]);
 
+  const { data: activityData, count: activityCount, isFetching } = activity || {};
+  const isLoading = isFetching || !activityData;
+
   return (
     <Grid container>
 
       <Grid item xs={12}>
         {
-          activity && activity.isFetching
-            ? (<CircularProgress />)
-            : (
-              <ActivityComponent
-                activity={
-                  activity
-                    && activity.data
-                    ? activity.data
-                    : []
-                }
-                totalCount={
-                  activity
-                    && activity.count
-                    ? activity.count
-                    : 0
-                }
-                activitiesPerPage={rowsPerPage}
-                page={page}
-                setPage={setPage}
-              />
-            )
+          isLoading ? (
+            <CircularProgress />
+          ) : (
+            <ActivityComponent
+              activity={activityData || []}
+              totalCount={activityCount || 0}
+              activitiesPerPage={rowsPerPage}
+              page={page}
+              setPage={setPage}
+            />
+          )
         }
-
       </Grid>
     </Grid>
   )
