@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.10](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.9...v0.0.10) (2024-04-08)
+
+
+### Performance
+
+* :wastebasket: remove no longer used menu items ([008f40f](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/008f40f491baa31c4f303f11a04e8652a3321c51))
+* :wastebasket: Remove views & routes that are no longer used ([9e56c5e](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/9e56c5e13f76c4a0cd8f556efed69cf5217f90ec))
+
 ### [0.0.9](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.8...v0.0.9) (2024-04-08)
 
 
