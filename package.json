@@ -1,6 +1,6 @@
 {
   "name": "runebase-discord-bot-dashboard",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Admin dashboard for Runebase-Discord-Bot",
   "scripts": {
     "extract": "lingui extract",

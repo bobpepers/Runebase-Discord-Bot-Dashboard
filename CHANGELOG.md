@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.11](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.10...v0.0.11) (2024-04-09)
+
+
+### Performance
+
+* :wastebasket: rm no longer used action types, rm faucet balance fetching ([a5aa423](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/a5aa4235c83b15f7b24dbdfc0caa745b5804dfb3))
+
 ### [0.0.10](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.9...v0.0.10) (2024-04-08)
 
 
