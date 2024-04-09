@@ -18,32 +18,12 @@ import ActivityContainer from '../containers/Activity';
 import ActivityFilter from '../containers/filters/ActivityFilter';
 
 import { withRouter } from '../hooks/withRouter';
-import {
-  fetchNodeStatusAction,
-} from '../actions/nodeStatus';
-
-import {
-  fetchBlockNumberAction,
-} from '../actions/blockNumber';
-
-import {
-  startSyncAction,
-} from '../actions/startSync';
-
-import {
-  fetchLiabilityAction,
-} from '../actions/liability';
-import {
-  patchPartnersAction,
-} from '../actions/patchPartners';
-
-import {
-  fetchBalanceAction,
-} from '../actions/balance';
-
-import {
-  fetchFaucetBalanceAction,
-} from '../actions/faucetBalance';
+import { fetchNodeStatusAction } from '../actions/nodeStatus';
+import { fetchBlockNumberAction } from '../actions/blockNumber';
+import { startSyncAction } from '../actions/startSync';
+import { fetchLiabilityAction } from '../actions/liability';
+import { patchPartnersAction } from '../actions/patchPartners';
+import { fetchBalanceAction } from '../actions/balance';
 
 const PREFIX = 'Home';
 
@@ -91,7 +71,6 @@ const Home = function (props) {
       dispatch(fetchNodeStatusAction());
       dispatch(fetchLiabilityAction());
       dispatch(fetchBalanceAction());
-      dispatch(fetchFaucetBalanceAction());
       dispatch(fetchBlockNumberAction());
     }
   }
@@ -101,7 +80,6 @@ const Home = function (props) {
       dispatch(fetchNodeStatusAction());
       dispatch(fetchLiabilityAction());
       dispatch(fetchBalanceAction());
-      dispatch(fetchFaucetBalanceAction());
       dispatch(fetchBlockNumberAction());
     }
   }, [
@@ -263,37 +241,6 @@ const Home = function (props) {
               && liability.data
               && liability.data.amount
               ? `${((Number(balance.data.amount) - (Number(liability.data.amount) / 1e8))).toFixed(8)} ${window.myConfig.ticker}`
-              : `0 ${window.myConfig.ticker}`}
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={6}
-          sm={6}
-          md={4}
-          lg={3}
-          xl={3}
-          className="zindexOne"
-          justifyContent="center"
-        >
-          <Typography
-            variant="h6"
-            gutterBottom
-            component="div"
-            align="center"
-          >
-            Faucet Balance
-          </Typography>
-          <Typography
-            variant="subtitle1"
-            gutterBottom
-            component="div"
-            align="center"
-          >
-            {faucetBalance.data
-              && faucetBalance.data
-              && faucetBalance.data.amount
-              ? `${faucetBalance.data.amount / 1e8} ${window.myConfig.ticker}`
               : `0 ${window.myConfig.ticker}`}
           </Typography>
         </Grid>
