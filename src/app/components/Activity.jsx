@@ -8,6 +8,7 @@ import Moment from 'react-moment';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
 
 const renderItems = (
   data,
@@ -31,11 +32,19 @@ const renderItems = (
 
           <Grid
             item
-            xs={4}
+            xs={2}
             lg={2}
             align="center"
           >
             <Moment interval={1000} fromNow>{Number(activity.timestamp)}</Moment>
+          </Grid>
+          <Grid
+            item
+            xs={2}
+            lg={2}
+            align="center"
+          >
+            {moment(activity.timestamp).utc().format('YYYY-MM-DD HH:mm:ss')}
           </Grid>
           <Grid
             item

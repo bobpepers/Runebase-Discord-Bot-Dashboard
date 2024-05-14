@@ -250,11 +250,13 @@ module.exports = (options) => {
       new Webpack.HotModuleReplacementPlugin(),
     );
 
+    const allowedHosts = ['localhost', 'discord-dev.runebase.io'];
     webpackConfig.devServer = {
       hot: !!options.isProduction,
       port: options.port,
       historyApiFallback: true,
       host: 'localhost',
+      allowedHosts,
       client: {
         overlay: false,
         logging: 'warn', // Want to set this to 'warn' or 'error'
