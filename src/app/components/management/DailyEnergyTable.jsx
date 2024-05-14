@@ -71,6 +71,9 @@ const headCells = [
     id: 'heistHits', numeric: true, disablePadding: false, label: 'Heist Hits',
   },
   {
+    id: 'ttl', numeric: true, disablePadding: false, label: 'TTL',
+  },
+  {
     id: 'removeKey', numeric: true, disablePadding: false, label: 'Remove Key',
   },
   {
@@ -243,6 +246,7 @@ function DailyEnergyTable(props) {
                     <TableCell align="right">{row.huntingEnergy}</TableCell>
                     <TableCell align="right">{row.heistEnergy}</TableCell>
                     <TableCell align="right">{row.heistHits}</TableCell>
+                    <TableCell align="right">{row.ttl}</TableCell>
                     <TableCell align="right">
                       <RemoveDailyEnergyKeyDialog
                         dailyEnergyKey={row.key}
