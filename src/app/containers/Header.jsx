@@ -238,6 +238,14 @@ const Header = function (props) {
                   Daily Energy
                 </MenuItem>
               </Link>
+              <Link
+                className="nav-link"
+                to="/management/condition"
+              >
+                <MenuItem onClick={handleCloseManagement}>
+                  Condition
+                </MenuItem>
+              </Link>
             </Menu>
 
             <Button
