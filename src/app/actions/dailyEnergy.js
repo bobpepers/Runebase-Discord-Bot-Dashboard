@@ -3,6 +3,8 @@ import {
   FETCH_DAILY_ENERGY_BEGIN,
   FETCH_DAILY_ENERGY_SUCCESS,
   FETCH_DAILY_ENERGY_FAIL,
+  UPDATE_DAILY_ENERGY,
+  ENQUEUE_SNACKBAR,
 } from './types/index';
 import { notistackErrorAdd } from './helpers/notistackError';
 
@@ -26,6 +28,38 @@ export function fetchDailyEnergyAction() {
           type: FETCH_DAILY_ENERGY_FAIL,
           payload: error,
         });
+      });
+  }
+}
+
+export function removeDailyEnergyKeyAction(dailyEnergyKey) {
+  return function (dispatch) {
+    axios.post(`${window.myConfig.apiUrl}/management/dailyenergy/remove`, {
+      dailyEnergyKey,
+    })
+      .then((response) => {
+        dispatch({
+          type: UPDATE_DAILY_ENERGY,
+          payload: {
+            key: dailyEnergyKey, // Include the key in the payload
+            result: response.data.result,
+          },
+        });
+        dispatch({
+          type: ENQUEUE_SNACKBAR,
+          notification: {
+            message: `Success: deleted daily energy key: ${dailyEnergyKey}`,
+            key: new Date().getTime() + Math.random(),
+            options: {
+              variant: 'success',
+            },
+          },
+        });
+      }).catch((error) => {
+        notistackErrorAdd(
+          dispatch,
+          error,
+        );
       });
   }
 }

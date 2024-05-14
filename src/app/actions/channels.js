@@ -49,17 +49,16 @@ export function banChannelAction(id, banMessage = '') {
     axios.post(`${window.myConfig.apiUrl}/management/channel/ban`, {
       id,
       banMessage,
-    })
-      .then((response) => {
-        dispatch({
-          type: UPDATE_CHANNEL,
-          payload: response.data.result,
-        });
-      }).catch((error) => {
-        notistackErrorAdd(
-          dispatch,
-          error,
-        );
+    }).then((response) => {
+      dispatch({
+        type: UPDATE_CHANNEL,
+        payload: response.data.result,
       });
+    }).catch((error) => {
+      notistackErrorAdd(
+        dispatch,
+        error,
+      );
+    });
   }
 }

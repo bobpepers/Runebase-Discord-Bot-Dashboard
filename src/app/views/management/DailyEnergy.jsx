@@ -11,11 +11,10 @@ import {
   TextField,
 } from '@mui/material';
 import { withRouter } from '../../hooks/withRouter';
-import { banUserAction } from '../../actions/users';
-import { fetchDailyEnergyAction } from '../../actions/dailyEnergy';
+import { removeDailyEnergyKeyAction, fetchDailyEnergyAction } from '../../actions/dailyEnergy';
 import DailyEnergyTable from '../../components/management/DailyEnergyTable';
 
-const PREFIX = 'Users';
+const PREFIX = 'DailyEnergy';
 
 const classes = {
   formControl: `${PREFIX}-formControl`,
@@ -65,11 +64,10 @@ const DailyEnergyView = function (props) {
 
   useEffect(() => { }, [dailyEnergy]);
 
-  const removeKey = (
-    banId,
-    banMessage,
+  const removeDailyEnergyKey = (
+    dailyEnergyKey,
   ) => {
-    dispatch(banUserAction(banId, banMessage))
+    dispatch(removeDailyEnergyKeyAction(dailyEnergyKey))
   };
 
   return (
@@ -126,7 +124,7 @@ const DailyEnergyView = function (props) {
                   rowsPerPage={rowsPerPage}
                   setRowsPerPage={setRowsPerPage}
                   totalCount={dailyEnergy && dailyEnergy.count && dailyEnergy.count}
-                  removeKey={removeKey}
+                  removeDailyEnergyKey={removeDailyEnergyKey}
                   dailyEnergyRecords={dailyEnergy
                     && dailyEnergy.data
                     ? dailyEnergy.data
