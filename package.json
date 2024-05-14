@@ -107,6 +107,7 @@
     "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.17",
     "@reduxjs/toolkit": "^2.2.4",
+    "@tsparticles/react": "^3.0.0",
     "axios": "^1.6.8",
     "babel-runtime": "^6.26.0",
     "bignumber.js": "^9.1.2",
@@ -131,6 +132,6 @@
     "socket.io-client": "^4.7.5",
     "speakeasy": "^2.0.0",
     "styled-components": "^6.1.11",
-    "tsparticles": "^2.12.0"
+    "tsparticles": "^3.4.0"
   }
 }
