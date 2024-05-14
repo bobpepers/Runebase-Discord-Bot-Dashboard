@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.12](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.11...v0.0.12) (2024-05-14)
+
+
+### Performance
+
+* :zap: Attach dateTime to activity ([2fb7dae](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/2fb7dae5deb90f69d6625b0dd8ff58b83659242b))
+
 ### [0.0.11](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.10...v0.0.11) (2024-04-09)
 
 
