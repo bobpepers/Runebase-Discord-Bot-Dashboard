@@ -34,6 +34,7 @@ import botFunction from './botFunction';
 
 import ranks from './ranks';
 import reminders from './reminders';
+import dailyEnergy from './dailyEnergy';
 
 const store = configureStore({
   reducer: {
@@ -74,6 +75,7 @@ const store = configureStore({
     botFunction,
 
     ranks,
+    dailyEnergy,
   },
 })
 

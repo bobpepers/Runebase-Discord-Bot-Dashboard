@@ -230,6 +230,14 @@ const Header = function (props) {
                   WithdrawalAddresses
                 </MenuItem>
               </Link>
+              <Link
+                className="nav-link"
+                to="/management/dailyEnergy"
+              >
+                <MenuItem onClick={handleCloseManagement}>
+                  Daily Energy
+                </MenuItem>
+              </Link>
             </Menu>
 
             <Button

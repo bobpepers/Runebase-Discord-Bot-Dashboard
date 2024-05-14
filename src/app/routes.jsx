@@ -22,6 +22,7 @@ import ResetPasswordVerify from './views/resetPassword/ResetPasswordVerify';
 import ResetPasswordNew from './views/resetPassword/ResetPasswordNew';
 import Servers from './views/management/Servers';
 import UserView from './views/management/User';
+import DailyEnergyView from './views/management/DailyEnergy';
 import Channels from './views/management/Channels';
 import Users from './views/management/Users';
 import BotSettings from './views/management/BotSettings';
@@ -128,6 +129,10 @@ const RoutesX = function (props) {
         <Route
           path="/management/withdrawaladdress/:addressId"
           element={<WithdrawalAddressView />}
+        />
+        <Route
+          path="/management/dailyEnergy"
+          element={<DailyEnergyView />}
         />
 
         {/* <Route
