@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.13](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.12...v0.0.13) (2024-05-15)
+
+
+### Features
+
+* :sparkles: Condition Management ([4a322b4](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/4a322b458373aa80c4f4c79c20ffc3677ca6640a))
+* :sparkles: Daily Energy Table (Management) ([157e9cd](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/157e9cd5da6ea2b03392510ad707398719d42224))
+* :sparkles: removeDailyEnergyKeyAction ([fd22447](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/fd22447b5591f59c2e646d5d45f7b686f63917b6))
+
+
+### Performance
+
+* :sparkles: upgr tsParticles (fix brkn changes) ([ce17245](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/ce1724513fe846a52385abe458ea82d7fcc1cd1b))
+* :zap: Add ttl to dailyEnergy table ([b8dfa78](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/b8dfa78f9349a10a1a9b6f99f790179af2fc6ff5))
+* :zap: rm no longer required hotReload modules ([0065439](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/0065439a229c9661887d4709fbd2ea6dd65da0ec))
+
 ### [0.0.12](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.11...v0.0.12) (2024-05-14)
 
 
