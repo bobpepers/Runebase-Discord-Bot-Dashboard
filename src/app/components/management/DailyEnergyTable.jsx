@@ -13,9 +13,12 @@ import {
   TableSortLabel,
   FormControlLabel,
   Switch,
+  TextField,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import RemoveDailyEnergyKeyDialog from './RemoveDailyEnergyKeyDialog';
+import { updateDailyEnergyAction } from '../../actions/dailyEnergy';
 
 const PREFIX = 'UsersTable';
 
@@ -74,10 +77,10 @@ const headCells = [
     id: 'ttl', numeric: true, disablePadding: false, label: 'TTL',
   },
   {
-    id: 'removeKey', numeric: true, disablePadding: false, label: 'Remove Key',
+    id: 'modify', numeric: true, disablePadding: false, label: 'Modify',
   },
   {
-    id: 'error', numeric: true, disablePadding: false, label: 'Error',
+    id: 'removeKey', numeric: true, disablePadding: false, label: 'Remove Key',
   },
 ];
 
@@ -167,6 +170,7 @@ function DailyEnergyTable(props) {
   const [selected, setSelected] = useState([]);
   const [dense, setDense] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -209,6 +213,64 @@ function DailyEnergyTable(props) {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
+  const [inEditMode, setInEditMode] = useState({
+    status: false,
+    rowKey: null,
+  });
+  const [unitExpeditionEnergy, setUnitExpeditionEnergy] = useState(null);
+  const [unitFishingEnergy, setUnitFishingEnergy] = useState(null);
+  const [unitHuntingEnergy, setUnitHuntingEnergy] = useState(null);
+
+  const onSave = async ({
+    id,
+    expeditionEnergy,
+    fishingEnergy,
+    huntingEnergy,
+    heistEnergy,
+    heistHits,
+  }) => {
+    await dispatch(updateDailyEnergyAction(
+      id,
+      expeditionEnergy,
+      fishingEnergy,
+      huntingEnergy,
+      heistEnergy,
+      heistHits,
+    ));
+    setInEditMode({
+      status: false,
+      rowKey: null,
+    });
+    setUnitExpeditionEnergy(null);
+    setUnitFishingEnergy(null);
+    setUnitHuntingEnergy(null);
+  }
+
+  const onCancel = () => {
+    setInEditMode({
+      status: false,
+      rowKey: null,
+    });
+    setUnitExpeditionEnergy(null);
+    setUnitFishingEnergy(null);
+    setUnitHuntingEnergy(null);
+  }
+
+  const onEdit = ({
+    id,
+    currentUnitExpeditionEnergy,
+    currentUnitFishingEnergy,
+    currentUnitHuntingEnergy,
+  }) => {
+    setInEditMode({
+      status: true,
+      rowKey: id,
+    })
+    setUnitExpeditionEnergy(currentUnitExpeditionEnergy);
+    setUnitFishingEnergy(currentUnitFishingEnergy);
+    setUnitHuntingEnergy(currentUnitHuntingEnergy);
+  }
+
   return (
     <Root className={classes.root}>
       <TableContainer>
@@ -241,12 +303,98 @@ function DailyEnergyTable(props) {
                     <TableCell align="right">
                       <Button onClick={() => navigate(`/management/user/${row.key}`)}>{row.username}</Button>
                     </TableCell>
-                    <TableCell align="right">{row.expeditionEnergy}</TableCell>
-                    <TableCell align="right">{row.fishingEnergy}</TableCell>
-                    <TableCell align="right">{row.huntingEnergy}</TableCell>
-                    <TableCell align="right">{row.heistEnergy}</TableCell>
-                    <TableCell align="right">{row.heistHits}</TableCell>
-                    <TableCell align="right">{row.ttl}</TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.key ? (
+                          <TextField
+                            value={unitExpeditionEnergy}
+                            onChange={(event) => setUnitExpeditionEnergy(event.target.value)}
+                          />
+                        ) : (
+                          row.expeditionEnergy
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.key ? (
+                          <TextField
+                            value={unitFishingEnergy}
+                            onChange={(event) => setUnitFishingEnergy(event.target.value)}
+                          />
+                        ) : (
+                          row.fishingEnergy
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.key ? (
+                          <TextField
+                            value={unitHuntingEnergy}
+                            onChange={(event) => setUnitHuntingEnergy(event.target.value)}
+                          />
+                        ) : (
+                          row.huntingEnergy
+                        )
+                      }
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.heistEnergy}
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.heistHits}
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.ttl}
+                    </TableCell>
+                    <TableCell align="right">
+                      {
+                        inEditMode.status && inEditMode.rowKey === row.key ? (
+                          <>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="large"
+                              onClick={() => onSave({
+                                id: row.key,
+                                expeditionEnergy: unitExpeditionEnergy,
+                                fishingEnergy: unitFishingEnergy,
+                                huntingEnergy: unitHuntingEnergy,
+                                heistEnergy: row.heistEnergy,
+                                heistHits: row.heistHits,
+                              })}
+                            >
+                              Save
+                            </Button>
+
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="large"
+                              style={{ marginLeft: 8 }}
+                              onClick={() => onCancel()}
+                            >
+                              Cancel
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            size="large"
+                            onClick={() => onEdit({
+                              id: row.key,
+                              currentUnitExpeditionEnergy: row.expeditionEnergy,
+                              currentUnitFishingEnergy: row.fishingEnergy,
+                              currentUnitHuntingEnergy: row.huntingEnergy,
+                            })}
+                          >
+                            Edit
+                          </Button>
+                        )
+                      }
+                    </TableCell>
                     <TableCell align="right">
                       <RemoveDailyEnergyKeyDialog
                         dailyEnergyKey={row.key}

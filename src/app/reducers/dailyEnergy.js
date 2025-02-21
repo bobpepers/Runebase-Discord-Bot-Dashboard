@@ -3,6 +3,7 @@ import {
   FETCH_DAILY_ENERGY_SUCCESS,
   FETCH_DAILY_ENERGY_FAIL,
   UPDATE_DAILY_ENERGY,
+  REMOVE_DAILY_ENERGY,
 } from '../actions/types/index';
 
 const initialState = {
@@ -36,10 +37,15 @@ export default (
       error: action.error,
       isFetching: false,
     };
-  case UPDATE_DAILY_ENERGY:
+  case REMOVE_DAILY_ENERGY:
     return {
       ...state,
       data: state.data.filter((item) => item.key !== action.payload.key), // Remove the item with the specified key
+    };
+  case UPDATE_DAILY_ENERGY:
+    return {
+      ...state,
+      data: state.data.map((item) => (item.key === action.payload.key ? action.payload : item)),
     };
   default:
     return state;

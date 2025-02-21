@@ -87,6 +87,7 @@ module.exports = (options) => {
         url: require.resolve('url/'),
         stream: require.resolve('stream-browserify'),
         crypto: require.resolve('crypto-browserify'),
+        vm: require.resolve('vm-browserify'),
       },
     },
     plugins: [
@@ -222,7 +223,6 @@ module.exports = (options) => {
 
   if (options.isProduction) {
     webpackConfig.entry = [Path.join(__dirname, '../src/app/index')];
-
     webpackConfig.plugins.push(
       new CopyPlugin({
         patterns: [
@@ -233,7 +233,6 @@ module.exports = (options) => {
         ],
       }),
     );
-
     webpackConfig.plugins.push(
       new WebpackObfuscator({
         rotateStringArray: true,
