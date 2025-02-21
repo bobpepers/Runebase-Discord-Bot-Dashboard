@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.13...v0.0.14) (2025-02-21)
+
+
+### Features
+
+* :sparkles: DailyEnergy: Individual field modify ([53bada9](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/commit/53bada9c203459b0bdfcde28b2b3666a97909078))
+
 ### [0.0.13](https://github.com/bobpepers/Runebase-Discord-Bot-dashboard/compare/v0.0.12...v0.0.13) (2024-05-15)
 
 

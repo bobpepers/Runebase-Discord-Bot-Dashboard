@@ -1,6 +1,6 @@
 {
   "name": "runebase-discord-bot-dashboard",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Admin dashboard for Runebase-Discord-Bot",
   "scripts": {
     "extract": "lingui extract",
@@ -131,6 +131,6 @@
     "socket.io-client": "^4.8.1",
     "speakeasy": "^2.0.0",
     "styled-components": "^6.1.15",
-    "tsparticles": "^3.8.1"    
+    "tsparticles": "^3.8.1"
   }
 }
